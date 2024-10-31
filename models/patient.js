@@ -8,7 +8,7 @@ const patientSchema = new mongoose.Schema({
         maxlength: 50, 
         trim: true
     },
-    surname: { 
+    surname: {
         type: String, 
         required: true, 
         minlength: 2, 
