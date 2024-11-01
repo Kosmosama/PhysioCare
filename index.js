@@ -2,7 +2,8 @@ import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 
-import patientRoutes from "./routes/patientRoutes.js";
+import patientsRoutes from "./routes/patientsRoutes.js";
+import physiosRoutes from "./routes/physiosRoutes.js";
 
 dotenv.config();
 
@@ -13,7 +14,8 @@ mongoose.connect(process.env.DB_URL)
     .then(() => console.log(`Connected to MongoDB...`))
     .catch(err => console.error(`Could not connect to MongoDB...`, err));
 
-app.use("/patients", patientRoutes);
+app.use("/patients", patientsRoutes);
+app.use("/physios", physiosRoutes);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server is running on port ${PORT}...`));

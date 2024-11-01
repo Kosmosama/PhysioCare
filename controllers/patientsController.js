@@ -5,9 +5,7 @@ const getPatients = async (req, res) => {
     try {
         const patients = await Patient.find();
 
-        if (patients.length === 0) {
-            return res.status(404).json({ message: "No patients found in system." });
-        }
+        if (patients.length === 0) return res.status(404).json({ message: "No patients found in system." });
 
         res.status(200).json(patients);
     } catch (error) {
@@ -22,9 +20,7 @@ const getPatient = async (req, res) => {
     try {
         const patient = await Patient.findById(id);
 
-        if (!patient) {
-            return res.status(404).json({ message: "Patient not found." });
-        }
+        if (!patient) return res.status(404).json({ message: "Patient not found." });
 
         res.status(200).json(patient);
     } catch (error) {
@@ -34,7 +30,7 @@ const getPatient = async (req, res) => {
 
 // Retrieve patient by name or surname. 
 // #TODO Ask if it is an OR or an AND statement, as to say, if patient has to match name & surname or only one
-const findPatientByNameOrSurname = async (req, res) => {
+const findPatientsByNameOrSurname = async (req, res) => {
     const { name, surname } = req.query;
 
     try {
@@ -47,9 +43,7 @@ const findPatientByNameOrSurname = async (req, res) => {
 
         const patients = await Patient.find(query);
 
-        if (patients.length === 0) {
-            return res.status(404).json({ message: "No patients found with those criteria." });
-        }
+        if (patients.length === 0) return res.status(404).json({ message: "No patients found with those criteria." });
 
         res.status(200).json(patients);
     } catch (error) {
@@ -123,4 +117,4 @@ const deletePatient = async (req, res) => {
     }
 };
 
-export { getPatients, getPatient, findPatientByNameOrSurname, addPatient, updatePatient, deletePatient };
+export { getPatients, getPatient, findPatientsByNameOrSurname, addPatient, updatePatient, deletePatient };

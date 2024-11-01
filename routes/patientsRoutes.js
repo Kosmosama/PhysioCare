@@ -2,7 +2,7 @@ import express from "express";
 import { 
     getPatients, 
     getPatient, 
-    findPatientByNameOrSurname, 
+    findPatientsByNameOrSurname, 
     addPatient,
     updatePatient,
     deletePatient
@@ -10,7 +10,7 @@ import {
 
 const router = express.Router();
 
-router.get("/find", findPatientByNameOrSurname);
+router.get("/find", findPatientsByNameOrSurname);
 
 router.get("/:id", getPatient);
 router.put("/:id", updatePatient);
