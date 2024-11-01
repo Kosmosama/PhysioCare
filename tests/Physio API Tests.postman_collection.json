@@ -1,83 +1,67 @@
 {
 	"info": {
-		"_postman_id": "da7b2eea-92bd-4b1d-b721-f42c318f485b",
-		"name": "Patient API Tests",
+		"_postman_id": "a1f2d088-22e4-4833-9857-3ae893401601",
+		"name": "Physio API Tests",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "39025388"
 	},
 	"item": [
 		{
-			"name": "Get All Patients",
+			"name": "Get All Physios",
 			"request": {
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:4000/patients",
+					"raw": "localhost:4000/physios",
 					"host": [
 						"localhost"
 					],
 					"port": "4000",
 					"path": [
-						"patients"
+						"physios"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "Get Patient By Id",
+			"name": "Get Physio By Id",
 			"request": {
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:4000/patients/67236340904f1c800b61a299",
+					"raw": "localhost:4000/physios/67236340904f1c800b61a2a6",
 					"host": [
 						"localhost"
 					],
 					"port": "4000",
 					"path": [
-						"patients",
-						"67236340904f1c800b61a299"
+						"physios",
+						"67236340904f1c800b61a2a6"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "Get Patient By Name/Surname",
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
+			"name": "Get Physios By Specialty",
 			"request": {
 				"method": "GET",
 				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
 				"url": {
-					"raw": "localhost:4000/patients/find?name=lui&surname=juan",
+					"raw": "localhost:4000/physios/find?specialty=Oncological",
 					"host": [
 						"localhost"
 					],
 					"port": "4000",
 					"path": [
-						"patients",
+						"physios",
 						"find"
 					],
 					"query": [
 						{
-							"key": "name",
-							"value": "lui"
-						},
-						{
-							"key": "surname",
-							"value": "juan"
+							"key": "specialty",
+							"value": "Oncological"
 						}
 					]
 				}
@@ -85,13 +69,13 @@
 			"response": []
 		},
 		{
-			"name": "Add New Patient",
+			"name": "Add New Physio",
 			"request": {
 				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"name\": \"John\",\r\n    \"surname\": \"Doe\",\r\n    \"birthDate\": \"1990-01-01\",\r\n    \"address\": \"123 Main St\",\r\n    \"insuranceNumber\": \"ABCDEFGHI\"\r\n}\r\n",
+					"raw": "{\r\n    \"name\": \"John\",\r\n    \"surname\": \"Doe\",\r\n    \"specialty\": \"Oncological\",\r\n    \"licenseNumber\": \"A7654321\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -99,27 +83,26 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:4000/patients/",
+					"raw": "localhost:4000/physios",
 					"host": [
 						"localhost"
 					],
 					"port": "4000",
 					"path": [
-						"patients",
-						""
+						"physios"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "Update Patient",
+			"name": "Update Physio",
 			"request": {
 				"method": "PUT",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"name\": \"Jane\",\r\n    \"surname\": \"Does\"\r\n}\r\n",
+					"raw": "{\r\n    \"name\":\"Jane\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -127,33 +110,33 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:4000/patients/672523f290d55b4e97de69c7",
+					"raw": "localhost:4000/physios/67251c6fe0d27200edfdbfa4",
 					"host": [
 						"localhost"
 					],
 					"port": "4000",
 					"path": [
-						"patients",
-						"672523f290d55b4e97de69c7"
+						"physios",
+						"67251c6fe0d27200edfdbfa4"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "Delete Patient",
+			"name": "Delete Physio",
 			"request": {
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "localhost:4000/patients/672523f290d55b4e97de69c7",
+					"raw": "localhost:4000/physios/67251c6fe0d27200edfdbfa4",
 					"host": [
 						"localhost"
 					],
 					"port": "4000",
 					"path": [
-						"patients",
-						"672523f290d55b4e97de69c7"
+						"physios",
+						"67251c6fe0d27200edfdbfa4"
 					]
 				}
 			},
