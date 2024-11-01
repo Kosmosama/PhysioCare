@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 
 import patientsRoutes from "./routes/patientsRoutes.js";
 import physiosRoutes from "./routes/physiosRoutes.js";
+import recordsRoutes from "./routes/recordsRoutes.js";
 
 dotenv.config();
 
@@ -16,6 +17,7 @@ mongoose.connect(process.env.DB_URL)
 
 app.use("/patients", patientsRoutes);
 app.use("/physios", physiosRoutes);
+app.use("/records", recordsRoutes);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server is running on port ${PORT}...`));

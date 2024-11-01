@@ -28,7 +28,7 @@ const getPhysio = async (req, res) => {
     }
 }
 
-// Retrieve physios by specialty. 
+// Retrieve physios by specialty
 const findPhysiosBySpecialty = async (req, res) => {
     const { specialty } = req.query;
 
