@@ -18,7 +18,7 @@ const physioSchema = new mongoose.Schema({
     specialty: { 
         type: String, 
         required: true, 
-        enum: ['Sports', 'Neurological', 'Pediatric', 'Geriatric', 'Oncological'] 
+        enum: ['Sports', 'Neurological', 'Pediatric', 'Geriatric', 'Oncological']
     },
     licenseNumber: { 
         type: String, 

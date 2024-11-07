@@ -35,7 +35,7 @@ const findPhysiosBySpecialty = async (req, res) => {
     try {
         const query = {};
 
-        if (specialty) query.specialty = specialty; // #TODO Make it case insensitive?
+        if (specialty) query.specialty = specialty;
 
         const physios = await Physio.find(query);
 
@@ -48,7 +48,6 @@ const findPhysiosBySpecialty = async (req, res) => {
 }
 
 // Insert a new physio
-// #TODO No error 500?
 const addPhysio = async (req, res) => {
     const { name, surname, specialty, licenseNumber } = req.body;
 

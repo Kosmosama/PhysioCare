@@ -28,17 +28,16 @@ const getPatient = async (req, res) => {
     }
 };
 
-// Retrieve patient by name or surname. 
-// #TODO Ask if it is an OR or an AND statement, as to say, if patient has to match name & surname or only one
+// Retrieve patient by name or surname.
 const findPatientsByNameOrSurname = async (req, res) => {
     const { name, surname } = req.query;
 
     try {
         const query = {};
         if (name || surname) {
-            query.$or = [];
-            if (name) query.$or.push({ name: { $regex: name, $options: "i" } });
-            if (surname) query.$or.push({ surname: { $regex: surname, $options: "i" } });
+            query.$and = [];
+            if (name) query.$and.push({ name: { $regex: name, $options: "i" } });
+            if (surname) query.$and.push({ surname: { $regex: surname, $options: "i" } });
         }
 
         const patients = await Patient.find(query);
@@ -52,7 +51,6 @@ const findPatientsByNameOrSurname = async (req, res) => {
 };
 
 // Insert a new patient
-// #TODO No error 500?
 const addPatient = async (req, res) => {
     const { name, surname, birthDate, address, insuranceNumber } = req.body;
 
@@ -74,7 +72,6 @@ const addPatient = async (req, res) => {
         if (error.code === 11000) return res.status(400).json({ error: "Insurance number must be unique." });
         
         res.status(400).json({ error: "An error occurred while adding the patient: " + error.message });
-        // (?) res.status(500).json({ error: "An internal server error occurred while adding the patient." });
     }
 };
 

@@ -34,7 +34,6 @@ const findRecordsBySurname = async (req, res) => {
     try {
         const { surname } = req.query;
 
-        // #TODO What should happen when surname is not specified 400? should I trim? case insensitive?
         const patients = await Patient.find({ surname: surname }).select('_id');
         
         if (patients.length === 0) return res.status(404).json({ message: "No records found for the patient(s) with that surname." });
@@ -67,7 +66,6 @@ const addRecord = async (req, res) => {
 
         res.status(201).json(savedRecord);
     } catch (error) {
-        // #TODO 400? no 500?
         res.status(400).json({ message: "Error creating record: " + error.message });
     }
 };
