@@ -1,10 +1,31 @@
 import jwt from "jsonwebtoken";
 
-// Function to generate token: Creates a JWT token for a valid user
+// Function to generate token.
+const generateToken = (login) => {
+    return jwt.sign({login: login}, process.env.SECRET, {expiresIn: "1d"});
+}
 
+// Function to verify token.
+const isTokenValid = (token) => {
+    try {
+        jwt.verify(token, process.env.SECRET);
+        return true;
+    } catch (error) {
+        return false;
+    }
+}
 
-// Function to verify token: Checks if the token is valid and decodes user data
+// Function to protect routes.
+const protectRoute = (req, res, next) => {
+    const token = req.headers["authorization"];
 
+    //#TOASK Suggestion (401)
+    if (!token || !token.startsWith("Bearer ")) {
+        return res.status(401).json({ error: "No token provided or invalid format." });
+    }
 
-// Function to protect routes: Restricts access to only users with valid token and verifies role to permit access for certain routes
-// User doesnt have permissions to access the required resource (credentials dont matter) -> 403 "Unauthorized access"
+    if (isTokenValid(token.split(" ")[1])) next();
+    else res.status(403).json({ error: "Unauthorized access." });
+}
+
+export { generateToken, isTokenValid, protectRoute };

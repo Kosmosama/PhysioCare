@@ -40,7 +40,7 @@ const findRecordsBySurname = async (req, res) => {
 
         const patientIds = patients.map(patient => patient._id);
 
-        const records = await Record.find({ patient: { $in: patientIds } });
+        const records = await Record.find({ patient: { $in: patientIds } }).populate("patient");
 
         res.status(200).json(records);
     } catch (error) {

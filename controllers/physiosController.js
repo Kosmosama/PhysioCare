@@ -68,7 +68,6 @@ const addPhysio = async (req, res) => {
         if (error.code === 11000) return res.status(400).json({ error: "License number must be unique." });
         
         res.status(400).json({ error: "An error occurred while adding the physio: " + error.message });
-        // (?) res.status(500).json({ error: "An internal server error occurred while adding the patient." });
     }
 };
 

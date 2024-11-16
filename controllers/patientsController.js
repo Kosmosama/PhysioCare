@@ -35,7 +35,7 @@ const findPatientsByNameOrSurname = async (req, res) => {
     try {
         const query = {};
         if (name || surname) {
-            query.$and = [];
+            query.$and = []; 
             if (name) query.$and.push({ name: { $regex: name, $options: "i" } });
             if (surname) query.$and.push({ surname: { $regex: surname, $options: "i" } });
         }

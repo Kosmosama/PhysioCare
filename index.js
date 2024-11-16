@@ -8,6 +8,17 @@ import recordsRoutes from "./routes/recordsRoutes.js";
 
 dotenv.config();
 
+// Maybe place this in a utils.js file
+(() => {
+    const requiredVars = ["DB_URL", "PORT", "SECRET"];
+    const missingVars = requiredVars.filter((key) => !process.env[key]);
+
+    if (missingVars.length > 0) {
+        console.error(`Missing required environment variables: ${missingVars.join(", ")}`);
+        process.exit(1);
+    }
+})()
+
 const app = express();
 app.use(express.json());
 
@@ -19,5 +30,5 @@ app.use("/patients", patientsRoutes);
 app.use("/physios", physiosRoutes);
 app.use("/records", recordsRoutes);
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT;
 app.listen(PORT, () => console.log(`Server is running on port ${PORT}...`));
