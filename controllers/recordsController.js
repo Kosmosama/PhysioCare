@@ -48,6 +48,7 @@ const findRecordsBySurname = async (req, res) => {
     }
 };
 
+//#TOASK message or error for errors?
 // Insert a new record
 const addRecord = async (req, res) => {
     try {
@@ -101,7 +102,7 @@ const addAppointmentToRecord = async (req, res) => {
     } catch (error) {
         if (error.name === 'ValidationError') return res.status(400).json({ error: "Validation failed: " + error.message });
 
-        res.status(500).json({ message: "An internal server error occurred while updating the record." });
+        res.status(500).json({ message: "An error occurred while updating the record." });
     }
 };
 
@@ -116,7 +117,7 @@ const deleteMedicalRecord = async (req, res) => {
 
         res.status(200).json(deletedRecord);
     } catch (error) {
-        res.status(500).json({ message: "An internal server error occurred while deleting the record." });
+        res.status(500).json({ message: "An error occurred while deleting the record." });
     }
 };
 

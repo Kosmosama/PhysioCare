@@ -91,7 +91,7 @@ const updatePhysio = async (req, res) => {
 
         if (error.code === 11000) return res.status(400).json({ error: "License number must be unique." });
 
-        res.status(500).json({ error: "An internal server error occurred while updating the physio." });
+        res.status(500).json({ error: "An error occurred while updating the physio." });
     }
 };
 
@@ -106,7 +106,7 @@ const deletePhysio = async (req, res) => {
 
         res.status(200).json(deletedPhysio);
     } catch (error) {
-        res.status(500).json({ error: "An internal server error occurred while deleting the physio." });
+        res.status(500).json({ error: "An error occurred while deleting the physio." });
     }
 };
 
