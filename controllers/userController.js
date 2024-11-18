@@ -2,7 +2,7 @@ import User from "../models/user.js";
 import bcrypt from "bcrypt";
 import { generateToken } from "../auth/auth.js";
 
-// const allowedRoles = ['admin', 'physio', 'patient'];
+// const allowedRoles = [Roles.ADMIN, Roles.PHYSIO, Roles.PATIENT];
 
 // Utility function to check if a user exists and return their data
 const findUserByLogin = async (login) => {
