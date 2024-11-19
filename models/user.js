@@ -1,12 +1,13 @@
 import mongoose from "mongoose";
-import { Roles } from "../utils/constants";
+import { ROLES } from "../utils/constants";
 
 const userSchema = new mongoose.Schema({
     login: {
         type: String,
         required: true,
         minlength: 4,
-        trim: true
+        trim: true,
+        unique: true
     },
     password: {
         type: String, 
@@ -17,7 +18,7 @@ const userSchema = new mongoose.Schema({
     role: {
         type: String, 
         required: true, 
-        enum: [Roles.ADMIN, Roles.PHYSIO, Roles.PATIENT]
+        enum: [ROLES.ADMIN, ROLES.PHYSIO, ROLES.PATIENT]
     }
 });
 

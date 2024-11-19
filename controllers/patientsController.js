@@ -5,7 +5,7 @@ const getPatients = async (req, res) => {
     try {
         const patients = await Patient.find();
 
-        if (patients.length === 0) return res.status(404).json({ message: "No patients found in system." });
+        if (patients.length === 0) return res.status(404).json({ error: "No patients found in system." });
 
         res.status(200).json(patients);
     } catch (error) {
@@ -16,11 +16,16 @@ const getPatients = async (req, res) => {
 // Retrieve details from a specific client
 const getPatient = async (req, res) => {
     const { id } = req.params;
+    const { id: userId, role } = req.user;
 
     try {
+        if (role === 'patient' && id !== userId) {
+            return res.status(403).json({ error: "Forbidden: Patients can only access their own records." });
+        }
+
         const patient = await Patient.findById(id);
 
-        if (!patient) return res.status(404).json({ message: "Patient not found." });
+        if (!patient) return res.status(404).json({ error: "Patient not found." });
 
         res.status(200).json(patient);
     } catch (error) {
@@ -42,7 +47,7 @@ const findPatientsByNameOrSurname = async (req, res) => {
 
         const patients = await Patient.find(query);
 
-        if (patients.length === 0) return res.status(404).json({ message: "No patients found with those criteria." });
+        if (patients.length === 0) return res.status(404).json({ error: "No patients found with those criteria." });
 
         res.status(200).json(patients);
     } catch (error) {

@@ -30,7 +30,8 @@ const recordSchema = new mongoose.Schema({
     patient: { 
         type: mongoose.Schema.Types.ObjectId,
         ref: 'patients',
-        required: true
+        required: true,
+        unique: true
     },
     medicalRecord: {
         type: String,

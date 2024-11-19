@@ -1,7 +1,7 @@
-const Roles = {
-    ADMIN: 'admin',
-    PHYSIO: 'physio',
-    PATIENT: 'patient'
+const ROLES = {
+    ADMIN: "admin",
+    PHYSIO: "physio",
+    PATIENT: "patient"
 };
 
-export { Roles };
+export { ROLES };

@@ -39,8 +39,7 @@ const logUser = async (req, res) => {
 
         res.status(200).json({ token: generateToken(user.login) });
     } catch (error) {
-        //#TOASK Error 500 here? or 401 (remember field error not message)
-        res.status(500).json({ message: "An error occurred. Please try again later." });
+        res.status(500).json({ error: "An error occurred. Please try again later." });
     }
 };
 
@@ -71,7 +70,7 @@ const logUser = async (req, res) => {
 //             });
 
 //             await newUser.save();
-//             return { login, message: "User created successfully." };
+//             return { login, error: "User created successfully." };
 //         }));
 
 //         res.status(201).json({ results });

@@ -5,7 +5,7 @@ const getPhysios = async (req, res) => {
     try {
         const physios = await Physio.find();
 
-        if (physios.length === 0) return res.status(404).json({ message: "No physios found in system." });
+        if (physios.length === 0) return res.status(404).json({ error: "No physios found in system." });
 
         res.status(200).json(physios);
     } catch (error) {
@@ -20,7 +20,7 @@ const getPhysio = async (req, res) => {
     try {
         const physio = await Physio.findById(id);
 
-        if (!physio) return res.status(404).json({ message: "Physio not found." });
+        if (!physio) return res.status(404).json({ error: "Physio not found." });
 
         res.status(200).json(physio);
     } catch (error) {
@@ -39,7 +39,7 @@ const findPhysiosBySpecialty = async (req, res) => {
 
         const physios = await Physio.find(query);
 
-        if (physios.length === 0) return res.status(404).json({ message: "No patients found with that specialty." });
+        if (physios.length === 0) return res.status(404).json({ error: "No patients found with that specialty." });
 
         res.status(200).json(physios);
     } catch (error) {
