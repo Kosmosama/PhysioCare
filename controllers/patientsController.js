@@ -1,4 +1,6 @@
 import Patient from "../models/patient.js";
+import { ROLES } from "../utils/constants.js";
+import { createUser } from "./userController.js";
 
 // Returns the list of all patients registered in the clinic
 const getPatients = async (req, res) => {
@@ -16,7 +18,7 @@ const getPatients = async (req, res) => {
 // Retrieve details from a specific client
 const getPatient = async (req, res) => {
     const { id } = req.params;
-    const { id: userId, role } = req.user;
+    const { id: userId, role: role } = req.user;
 
     try {
         if (role === 'patient' && id !== userId) {
@@ -57,9 +59,12 @@ const findPatientsByNameOrSurname = async (req, res) => {
 
 // Insert a new patient
 const addPatient = async (req, res) => {
-    const { name, surname, birthDate, address, insuranceNumber } = req.body;
+    const { name, surname, birthDate, address, insuranceNumbe, login, password } = req.body;
+
+    const user = createUser({ login: login, password: password, role: ROLES.PATIENT });
 
     const newPatient = new Patient({
+        _id: user.id,
         name,
         surname,
         birthDate,

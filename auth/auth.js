@@ -2,7 +2,7 @@ import jwt from "jsonwebtoken";
 
 // Function to generate token.
 const generateToken = (user) => {
-    return jwt.sign({ login: user.login, role: user.role }, process.env.SECRET, { expiresIn: "1d" });
+    return jwt.sign({ id: user._id, login: user.login, role: user.role }, process.env.SECRET, { expiresIn: "1d" });
 }
 
 // Function to verify token.
