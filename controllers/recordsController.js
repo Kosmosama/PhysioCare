@@ -26,9 +26,7 @@ const getRecord = async (req, res) => {
 
         const record = await Record.findOne({ patientId: id });
 
-        if (!record) {
-            return res.status(404).json({ error: "Record not found." });
-        }
+        if (!record) return res.status(404).json({ error: "Record not found." });
 
         res.status(200).json({ result: record });
     } catch (error) {
@@ -83,15 +81,11 @@ const addAppointmentToRecord = async (req, res) => {
     const { date, physio, diagnosis, treatment, observations } = req.body;
 
     try {
-        const appointmentDate = new Date(date);
-        if (isNaN(appointmentDate.getTime())) {
-            return res.status(400).json({ error: "Invalid date format." });
-        }
+        if (isNaN((new Date(date)).getTime())) return res.status(400).json({ error: "Invalid date format." });
         
         const record = await Record.findById(id);
 
         if (!record) return res.status(404).json({ error: "Record not found." });
-
 
         const newAppointment = {
             date: appointmentDate,

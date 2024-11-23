@@ -19,12 +19,9 @@ const getPatients = async (req, res) => {
 const getPatient = async (req, res) => {
     const { id } = req.params;
     const { id: userId, rol: rol } = req.user;
-
     try {
-        if (rol === 'patient' && id !== userId) {
-            return res.status(403).json({ error: "Forbidden: Patients can only access their own records." });
-        }
-
+        if (rol === 'patient' && id !== userId) return res.status(403).json({ error: "Forbidden: Patients can only access their own records." });
+        
         const patient = await Patient.findById(id);
 
         if (!patient) return res.status(404).json({ error: "Patient not found." });
@@ -64,7 +61,7 @@ const addPatient = async (req, res) => {
         const user = createUser({ login: login, password: password, role: ROLES.PATIENT });
         
         const newPatient = new Patient({
-            _id: user.id,
+            _id: user._id,
             name,
             surname,
             birthDate,
@@ -88,20 +85,21 @@ const addPatient = async (req, res) => {
 const updatePatient = async (req, res) => {
     const { id } = req.params;
     const { name, surname, birthDate, address, insuranceNumber } = req.body;
-
+    
     try {
         const updatedPatient = await Patient.findByIdAndUpdate(
             id,
             { name, surname, birthDate, address, insuranceNumber },
             { new: true, runValidators: true }
         );
-
+        
         if (!updatedPatient) return res.status(404).json({ error: "Patient not found." });
-
+        
         res.status(200).json({ result: updatedPatient });
     } catch (error) {
         if (error.name === 'ValidationError') return res.status(400).json({ error: "Validation failed: " + error.message });
-
+        
+        // 11000 -> Trying to duplicate value on unique field
         if (error.code === 11000) return res.status(400).json({ error: "Insurance number must be unique." });
 
         res.status(500).json({ error: "An internal server error occurred while updating the patient." });

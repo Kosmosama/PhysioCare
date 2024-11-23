@@ -12,13 +12,12 @@ const findUserByLogin = async (login) => {
 
 // Utility function to hash passwords
 const hashPassword = async (password) => {
-    const salt = await bcrypt.genSalt(10);
-    return await bcrypt.hash(password, salt);
+    return await bcrypt.hash(password, await bcrypt.genSalt(10));
 };
 
 // Utility function to validate user data
 const validateUserData = async (userData) => {
-    //#TODO Make this throw an error
+    //#TODO Make this throw an error (maybe)
     const { login, password, rol } = userData;
     if (!login || !password || !rol) {
         return "Missing required fields.";
@@ -70,27 +69,27 @@ const logUser = async (req, res) => {
 };
 
 // Registers an array of users in the database
-const registerUsers = async (req, res) => {
-    try {
-        const { users } = req.body;
+// const registerUsers = async (req, res) => {
+//     try {
+//         const { users } = req.body;
 
-        if (!Array.isArray(users) || users.length === 0) {
-            return res.status(400).json({ error: "The 'users' field must be a non-empty array." });
-        }
+//         if (!Array.isArray(users) || users.length === 0) {
+//             return res.status(400).json({ error: "The 'users' field must be a non-empty array." });
+//         }
 
-        const results = await Promise.all(users.map(async (userData) => {
-            const newUser = await createUser(userData);
-            if (!newUser) {
-                return { login: userData.login || null, error: "Failed to create user." };
-            }
-            return { login: newUser.login, message: "User created successfully." };
-        }));
+//         const results = await Promise.all(users.map(async (userData) => {
+//             const newUser = await createUser(userData);
+//             if (!newUser) {
+//                 return { login: userData.login || null, error: "Failed to create user." };
+//             }
+//             return { login: newUser.login, message: "User created successfully." };
+//         }));
 
-        res.status(201).json({ results });
-    } catch (error) {
-        res.status(500).json({ error: "An error occurred while saving users." });
-    }
-};
+//         res.status(201).json({ results });
+//     } catch (error) {
+//         res.status(500).json({ error: "An error occurred while saving users." });
+//     }
+// };
 
-export { logUser, registerUsers, createUser };
-// export { logUser };
+// export { logUser, registerUsers, createUser };
+export { logUser, createUser };
