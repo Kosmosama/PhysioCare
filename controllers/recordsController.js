@@ -8,7 +8,7 @@ const getRecords = async (req, res) => {
 
         if (records.length === 0) return res.status(404).json({ error: "No records found in system." });
 
-        res.status(200).json(records);
+        res.status(200).json({ result: records });
     } catch (error) {
         res.status(500).json({ error: "An error occurred while fetching records." });
     }
@@ -30,7 +30,7 @@ const getRecord = async (req, res) => {
             return res.status(404).json({ error: "Record not found." });
         }
 
-        res.status(200).json(record);
+        res.status(200).json({ result: record });
     } catch (error) {
         res.status(500).json({ error: "An error occurred while fetching the record." });
     }
@@ -49,7 +49,7 @@ const findRecordsBySurname = async (req, res) => {
 
         const records = await Record.find({ patient: { $in: patientIds } }).populate("patient");
 
-        res.status(200).json(records);
+        res.status(200).json({ result: records });
     } catch (error) {
         res.status(500).json({ error: "An error occurred while fetching records." });
     }
@@ -71,7 +71,7 @@ const addRecord = async (req, res) => {
 
         const savedRecord = await newRecord.save();
 
-        res.status(201).json(savedRecord);
+        res.status(201).json({ result: savedRecord });
     } catch (error) {
         res.status(400).json({ error: "Error creating record: " + error.error });
     }
@@ -104,7 +104,7 @@ const addAppointmentToRecord = async (req, res) => {
 
         const updatedRecord = await record.save();
 
-        res.status(201).json(updatedRecord);
+        res.status(201).json({ result: updatedRecord });
     } catch (error) {
         if (error.name === 'ValidationError') return res.status(400).json({ error: "Validation failed: " + error.error });
 
@@ -121,7 +121,7 @@ const deleteMedicalRecord = async (req, res) => {
 
         if (!deletedRecord) return res.status(404).json({ error: "Record not found." });
 
-        res.status(200).json(deletedRecord);
+        res.status(200).json({ result: deletedRecord });
     } catch (error) {
         res.status(500).json({ error: "An error occurred while deleting the record." });
     }

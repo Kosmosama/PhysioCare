@@ -7,7 +7,7 @@ const getPhysios = async (req, res) => {
 
         if (physios.length === 0) return res.status(404).json({ error: "No physios found in system." });
 
-        res.status(200).json(physios);
+        res.status(200).json({ result: physios });
     } catch (error) {
         res.status(500).json({ error: "An error occurred while fetching physios." });
     }
@@ -22,7 +22,7 @@ const getPhysio = async (req, res) => {
 
         if (!physio) return res.status(404).json({ error: "Physio not found." });
 
-        res.status(200).json(physio);
+        res.status(200).json({ result: physio });
     } catch (error) {
         res.status(500).json({ error: "An error occurred while fetching physio: " + id });
     }
@@ -41,7 +41,7 @@ const findPhysiosBySpecialty = async (req, res) => {
 
         if (physios.length === 0) return res.status(404).json({ error: "No patients found with that specialty." });
 
-        res.status(200).json(physios);
+        res.status(200).json({ result: physios });
     } catch (error) {
         res.status(500).json({ error: "An error occurred while fetching patients." });
     }
@@ -60,7 +60,7 @@ const addPhysio = async (req, res) => {
 
     try {
         const savedPhysio = await newPhysio.save();
-        res.status(201).json(savedPhysio);
+        res.status(201).json({ result: savedPhysio });
     } catch (error) {
         if (error.name === 'ValidationError') return res.status(400).json({ error: "Validation failed: " + error.message });
         
@@ -85,7 +85,7 @@ const updatePhysio = async (req, res) => {
 
         if (!updatedPhysio) return res.status(404).json({ error: "Physio not found." });
 
-        res.status(200).json(updatedPhysio);
+        res.status(200).json({ result: updatedPhysio });
     } catch (error) {
         if (error.name === 'ValidationError') return res.status(400).json({ error: "Validation failed: " + error.message });
 
@@ -104,7 +104,7 @@ const deletePhysio = async (req, res) => {
 
         if (!deletedPhysio) return res.status(404).json({ error: "Physio not found." });
 
-        res.status(200).json(deletedPhysio);
+        res.status(200).json({ result: deletedPhysio });
     } catch (error) {
         res.status(500).json({ error: "An error occurred while deleting the physio." });
     }

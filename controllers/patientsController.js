@@ -9,7 +9,7 @@ const getPatients = async (req, res) => {
 
         if (patients.length === 0) return res.status(404).json({ error: "No patients found in system." });
 
-        res.status(200).json(patients);
+        res.status(200).json({ result: patients });
     } catch (error) {
         res.status(500).json({ error: "An error occurred while fetching patients." });
     }
@@ -29,7 +29,7 @@ const getPatient = async (req, res) => {
 
         if (!patient) return res.status(404).json({ error: "Patient not found." });
 
-        res.status(200).json(patient);
+        res.status(200).json({ result: patient });
     } catch (error) {
         res.status(500).json({ error: "An error occurred while fetching patient: " + id });
     }
@@ -38,7 +38,6 @@ const getPatient = async (req, res) => {
 // Retrieve patient by name or surname.
 const findPatientsByNameOrSurname = async (req, res) => {
     const { name, surname } = req.query;
-
     try {
         const query = {};
         if (name || surname) {
@@ -51,7 +50,7 @@ const findPatientsByNameOrSurname = async (req, res) => {
 
         if (patients.length === 0) return res.status(404).json({ error: "No patients found with those criteria." });
 
-        res.status(200).json(patients);
+        res.status(200).json({ result: patients });
     } catch (error) {
         res.status(500).json({ error: "An error occurred while fetching patients." });
     }
@@ -63,7 +62,7 @@ const addPatient = async (req, res) => {
 
     try {
         const user = createUser({ login: login, password: password, role: ROLES.PATIENT });
-
+        
         const newPatient = new Patient({
             _id: user.id,
             name,
@@ -72,9 +71,9 @@ const addPatient = async (req, res) => {
             address,
             insuranceNumber
         });
-
+        
         const savedPatient = await newPatient.save();
-        res.status(201).json(savedPatient);
+        res.status(201).json({ result: savedPatient });
     } catch (error) {
         if (error.name === 'ValidationError') return res.status(400).json({ error: "Validation failed: " + error.message });
         
@@ -99,7 +98,7 @@ const updatePatient = async (req, res) => {
 
         if (!updatedPatient) return res.status(404).json({ error: "Patient not found." });
 
-        res.status(200).json(updatedPatient);
+        res.status(200).json({ result: updatedPatient });
     } catch (error) {
         if (error.name === 'ValidationError') return res.status(400).json({ error: "Validation failed: " + error.message });
 
@@ -118,7 +117,7 @@ const deletePatient = async (req, res) => {
 
         if (!deletedPatient) return res.status(404).json({ error: "Patient not found." });
 
-        res.status(200).json(deletedPatient);
+        res.status(200).json({ result: deletedPatient });
     } catch (error) {
         res.status(500).json({ error: "An internal server error occurred while deleting the patient." });
     }
