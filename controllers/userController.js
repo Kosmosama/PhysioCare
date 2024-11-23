@@ -17,17 +17,12 @@ const hashPassword = async (password) => {
 
 // Utility function to validate user data
 const validateUserData = async (userData) => {
-    //#TODO Make this throw an error (maybe)
     const { login, password, rol } = userData;
-    if (!login || !password || !rol) {
-        return "Missing required fields.";
-    }
-    if (!allowedRoles.includes(rol)) {
-        return "Invalid role.";
-    }
-    if (await findUserByLogin(login)) {
-        return "User already exists";
-    }
+
+    if (!login || !password || !rol) return "Missing required fields.";
+    if (!allowedRoles.includes(rol)) return "Invalid role.";
+    if (await findUserByLogin(login)) return "User already exists";
+    
     return null;
 };
 
@@ -52,8 +47,11 @@ const createUser = async (userData) => {
 
 // Checks if the user exists and returns a token
 const logUser = async (req, res) => {
+    const { login, password } = req.body;
+    
+    // I would add a 400 error here that checks all data was sent
+    
     try {
-        const { login, password } = req.body;
         const user = await findUserByLogin(login);
         
         const test = await bcrypt.compare(password, user.password);

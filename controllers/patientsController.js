@@ -19,6 +19,7 @@ const getPatients = async (req, res) => {
 const getPatient = async (req, res) => {
     const { id } = req.params;
     const { id: userId, rol: rol } = req.user;
+
     try {
         if (rol === 'patient' && id !== userId) return res.status(403).json({ error: "Forbidden: Patients can only access their own records." });
         
@@ -35,6 +36,9 @@ const getPatient = async (req, res) => {
 // Retrieve patient by name or surname.
 const findPatientsByNameOrSurname = async (req, res) => {
     const { name, surname } = req.query;
+
+    // I would add a 400 error here that checks all data was sent
+
     try {
         const query = {};
         if (name || surname) {
@@ -86,6 +90,8 @@ const updatePatient = async (req, res) => {
     const { id } = req.params;
     const { name, surname, birthDate, address, insuranceNumber } = req.body;
     
+    // I would add a 400 error here that checks all data was sent
+
     try {
         const updatedPatient = await Patient.findByIdAndUpdate(
             id,

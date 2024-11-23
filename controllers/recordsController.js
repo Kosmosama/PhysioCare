@@ -20,9 +20,7 @@ const getRecord = async (req, res) => {
     const { id: userId, rol } = req.user;
 
     try {
-        if (rol === 'patient' && id !== userId) {
-            return res.status(403).json({ error: "Forbidden: Patients can only access their own records." });
-        }
+        if (rol === 'patient' && id !== userId) return res.status(403).json({ error: "Forbidden: Patients can only access their own records." });
 
         const record = await Record.findOne({ patientId: id });
 
@@ -36,9 +34,9 @@ const getRecord = async (req, res) => {
 
 // Retrieve records by patient surname
 const findRecordsBySurname = async (req, res) => {
+    const { surname } = req.query;
+    
     try {
-        const { surname } = req.query;
-
         const patients = await Patient.find({ surname: surname }).select('_id');
         
         if (patients.length === 0) return res.status(404).json({ error: "No records found for the patient(s) with that surname." });
@@ -55,9 +53,11 @@ const findRecordsBySurname = async (req, res) => {
 
 // Insert a new record
 const addRecord = async (req, res) => {
-    try {
-        const { patient, medicalRecord } = req.body;
+    const { patient, medicalRecord } = req.body;
+    
+    // I would add a 400 error here that checks all data was sent
 
+    try {
         if (!patient) return res.status(400).json({ error: "Patient ID is required." });
         if (!medicalRecord) return res.status(400).json({ error: "Medical record information is required." });
 
