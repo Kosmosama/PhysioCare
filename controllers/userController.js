@@ -7,7 +7,7 @@ const allowedRoles = [ROLES.ADMIN, ROLES.PHYSIO, ROLES.PATIENT];
 
 // Utility function to check if a user exists and return their data
 const findUserByLogin = async (login) => {
-    return await User.findOne({ login: login.trim() });
+    return await User.findOne({ login: login });
 };
 
 // Utility function to hash passwords
@@ -19,11 +19,11 @@ const hashPassword = async (password) => {
 // Utility function to validate user data
 const validateUserData = async (userData) => {
     //#TODO Make this throw an error
-    const { login, password, role } = userData;
-    if (!login || !password || !role) {
+    const { login, password, rol } = userData;
+    if (!login || !password || !rol) {
         return "Missing required fields.";
     }
-    if (!allowedRoles.includes(role)) {
+    if (!allowedRoles.includes(rol)) {
         return "Invalid role.";
     }
     if (await findUserByLogin(login)) {
@@ -39,12 +39,12 @@ const createUser = async (userData) => {
         return null;
     }
 
-    const { login, password, role } = userData;
+    const { login, password, rol } = userData;
 
     const newUser = new User({
         login: login.trim(),
         password: await hashPassword(password),
-        role,
+        rol,
     });
 
     await newUser.save();
@@ -56,14 +56,14 @@ const logUser = async (req, res) => {
     try {
         const { login, password } = req.body;
         const user = await findUserByLogin(login);
-
+        
         const test = await bcrypt.compare(password, user.password);
-
+        
         if (!user || !test) {
             return res.status(401).json({ error: "Incorrect login credentials." });
         }
-
-        res.status(200).json({ token: generateToken(user) });
+        
+        res.status(200).send({ result: generateToken(user) });
     } catch (error) {
         res.status(500).json({ error: "An error occurred. Please try again later." });
     }

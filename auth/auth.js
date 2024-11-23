@@ -2,7 +2,7 @@ import jwt from "jsonwebtoken";
 
 // Function to generate token.
 const generateToken = (user) => {
-    return jwt.sign({ id: user._id, login: user.login, role: user.role }, process.env.SECRET, { expiresIn: "1d" });
+    return jwt.sign({ id: user._id, login: user.login, rol: user.rol }, process.env.SECRET, { expiresIn: "1d" });
 }
 
 // Function to verify token.
@@ -30,7 +30,7 @@ const protectRoute = (...allowedRoles) => {
             return res.status(403).json({ error: "Invalid or expired token." });
         }
 
-        if (allowedRoles.length && !allowedRoles.includes(decodedToken.role)) {
+        if (allowedRoles.length && !allowedRoles.includes(decodedToken.rol)) {
             return res.status(403).json({ error: "Forbidden: Insufficient role privileges." });
         }
 

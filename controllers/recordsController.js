@@ -17,10 +17,10 @@ const getRecords = async (req, res) => {
 // Retrieve details from a specific record
 const getRecord = async (req, res) => {
     const { id } = req.params;
-    const { id: userId, role } = req.user;
+    const { id: userId, rol } = req.user;
 
     try {
-        if (role === 'patient' && id !== userId) {
+        if (rol === 'patient' && id !== userId) {
             return res.status(403).json({ error: "Forbidden: Patients can only access their own records." });
         }
 

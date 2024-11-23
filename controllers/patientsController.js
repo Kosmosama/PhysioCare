@@ -18,10 +18,10 @@ const getPatients = async (req, res) => {
 // Retrieve details from a specific client
 const getPatient = async (req, res) => {
     const { id } = req.params;
-    const { id: userId, role: role } = req.user;
+    const { id: userId, rol: rol } = req.user;
 
     try {
-        if (role === 'patient' && id !== userId) {
+        if (rol === 'patient' && id !== userId) {
             return res.status(403).json({ error: "Forbidden: Patients can only access their own records." });
         }
 
@@ -59,20 +59,20 @@ const findPatientsByNameOrSurname = async (req, res) => {
 
 // Insert a new patient
 const addPatient = async (req, res) => {
-    const { name, surname, birthDate, address, insuranceNumbe, login, password } = req.body;
-
-    const user = createUser({ login: login, password: password, role: ROLES.PATIENT });
-
-    const newPatient = new Patient({
-        _id: user.id,
-        name,
-        surname,
-        birthDate,
-        address,
-        insuranceNumber
-    });
+    const { name, surname, birthDate, address, insuranceNumber, login, password } = req.body;
 
     try {
+        const user = createUser({ login: login, password: password, role: ROLES.PATIENT });
+
+        const newPatient = new Patient({
+            _id: user.id,
+            name,
+            surname,
+            birthDate,
+            address,
+            insuranceNumber
+        });
+
         const savedPatient = await newPatient.save();
         res.status(201).json(savedPatient);
     } catch (error) {

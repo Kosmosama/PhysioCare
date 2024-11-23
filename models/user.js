@@ -15,7 +15,7 @@ const userSchema = new mongoose.Schema({
         minlength: 7,
         trim: true
     },
-    role: {
+    rol: {
         type: String, 
         required: true, 
         enum: [ROLES.ADMIN, ROLES.PHYSIO, ROLES.PATIENT]
