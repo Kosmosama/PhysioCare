@@ -22,7 +22,7 @@ const getRecord = async (req, res) => {
     try {
         if (rol === 'patient' && id !== userId) return res.status(403).json({ error: "Forbidden: Patients can only access their own records." });
 
-        const record = await Record.findOne({ patientId: id });
+        const record = await Record.findOne({ patient: id });
 
         if (!record) return res.status(404).json({ error: "Record not found." });
 

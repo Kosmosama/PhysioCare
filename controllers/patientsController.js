@@ -90,7 +90,7 @@ const updatePatient = async (req, res) => {
     const { id } = req.params;
     const { name, surname, birthDate, address, insuranceNumber } = req.body;
     
-    // I would add a 400 error here that checks all data was sent
+    // I would add a 400 error here that checks all/some data was sent
 
     try {
         const updatedPatient = await Patient.findByIdAndUpdate(

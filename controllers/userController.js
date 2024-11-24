@@ -53,12 +53,10 @@ const logUser = async (req, res) => {
     
     try {
         const user = await findUserByLogin(login);
+        if (!user) return res.status(401).json({ error: "Incorrect login." });
         
         const test = await bcrypt.compare(password, user.password);
-        
-        if (!user || !test) {
-            return res.status(401).json({ error: "Incorrect login credentials." });
-        }
+        if (!test) return res.status(401).json({ error: "Incorrect password." });
         
         res.status(200).send({ result: generateToken(user) });
     } catch (error) {
