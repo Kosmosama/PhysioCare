@@ -15,7 +15,7 @@ build/
 Thumbs.db
 
 # Environment variables
-.env
+#.env
 
 # PP
 asd*
