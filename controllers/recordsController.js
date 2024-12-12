@@ -77,7 +77,7 @@ const addRecord = async (req, res) => {
 
 // Insert a new appointment o a record
 const addAppointmentToRecord = async (req, res) => {
-    const { id } = req.params;
+    const { id } = req.params; // Should be patient id
     const { date, physio, diagnosis, treatment, observations } = req.body;
 
     try {
