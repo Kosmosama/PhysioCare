@@ -1,6 +1,6 @@
 import express from "express";
-import { ROLES } from "../utils/constants.js";
-import { protectRoute } from "../auth/auth.js";
+// import { ROLES } from "../utils/constants.js";
+// import { protectRoute } from "../auth/auth.js";
 import { 
     getPhysios,
     getPhysio,
@@ -12,13 +12,13 @@ import {
 
 const router = express.Router();
 
-router.get("/find", protectRoute(ROLES.ADMIN, ROLES.PHYSIO, ROLES.PATIENT), findPhysiosBySpecialty);
+router.get("/find", findPhysiosBySpecialty);
 
-router.get("/:id", protectRoute(ROLES.ADMIN, ROLES.PHYSIO, ROLES.PATIENT), getPhysio);
-router.put("/:id", protectRoute(ROLES.ADMIN), updatePhysio);
-router.delete("/:id", protectRoute(ROLES.ADMIN), deletePhysio);
+router.get("/:id", getPhysio);
+router.put("/:id",  updatePhysio);
+router.delete("/:id",  deletePhysio);
 
-router.get("/", protectRoute(ROLES.ADMIN, ROLES.PHYSIO, ROLES.PATIENT), getPhysios);
-router.post("/", protectRoute(ROLES.ADMIN), addPhysio);
+router.get("/", getPhysios);
+router.post("/", addPhysio);
 
 export default router;

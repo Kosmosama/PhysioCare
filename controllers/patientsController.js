@@ -18,10 +18,10 @@ const getPatients = async (req, res) => {
 // Retrieve details from a specific client
 const getPatient = async (req, res) => {
     const { id } = req.params;
-    const { id: userId, rol: rol } = req.user;
+    // const { id: userId, rol: rol } = req.user;
 
     try {
-        if (rol === 'patient' && id !== userId) return res.status(403).json({ error: "Forbidden: Patients can only access their own records." });
+        // if (rol === 'patient' && id !== userId) return res.status(403).json({ error: "Forbidden: Patients can only access their own records." });
         
         const patient = await Patient.findById(id);
 
