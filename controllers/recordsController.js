@@ -54,8 +54,6 @@ const findRecordsBySurname = async (req, res) => {
 // Insert a new record
 const addRecord = async (req, res) => {
     const { patient, medicalRecord } = req.body;
-    
-    // I would add a 400 error here that checks all data was sent
 
     try {
         if (!patient) return res.status(400).json({ error: "Patient ID is required." });
@@ -77,7 +75,7 @@ const addRecord = async (req, res) => {
 
 // Insert a new appointment o a record
 const addAppointmentToRecord = async (req, res) => {
-    const { id } = req.params; // Should be patient id
+    const { id } = req.params;
     const { date, physio, diagnosis, treatment, observations } = req.body;
 
     try {
@@ -108,7 +106,7 @@ const addAppointmentToRecord = async (req, res) => {
 
 // Delete record by ID
 const deleteMedicalRecord = async (req, res) => {
-    const { id } = req.params; // Should be patient id
+    const { id } = req.params;
     
     try {
         const deletedRecord = await Record.findOneAndDelete({ patient: id });

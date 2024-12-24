@@ -75,9 +75,6 @@ const addPhysio = async (req, res) => {
 const updatePhysio = async (req, res) => {
     const { id } = req.params;
     const { name, surname, specialty, licenseNumber } = req.body;
-
-    // I would add a 400 error here that checks all data was sent
-
     try {
         const updatedPhysio = await Physio.findByIdAndUpdate(
             id,

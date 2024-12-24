@@ -1,6 +1,6 @@
 import Patient from "../models/patient.js";
-import { ROLES } from "../utils/constants.js";
-import { createUser } from "./userController.js";
+// import { ROLES } from "../utils/constants.js";
+// import { createUser } from "./userController.js";
 
 // Returns the list of all patients registered in the clinic
 const getPatients = async (req, res) => {
@@ -37,8 +37,6 @@ const getPatient = async (req, res) => {
 const findPatientsByNameOrSurname = async (req, res) => {
     const { name, surname } = req.query;
 
-    // I would add a 400 error here that checks all data was sent
-
     try {
         const query = {};
         if (name || surname) {
@@ -62,10 +60,10 @@ const addPatient = async (req, res) => {
     const { name, surname, birthDate, address, insuranceNumber, login, password } = req.body;
 
     try {
-        const user = createUser({ login: login, password: password, role: ROLES.PATIENT });
+        // const user = createUser({ login: login, password: password, role: ROLES.PATIENT });
         
         const newPatient = new Patient({
-            _id: user._id,
+            // _id: user._id,
             name,
             surname,
             birthDate,
@@ -89,8 +87,6 @@ const addPatient = async (req, res) => {
 const updatePatient = async (req, res) => {
     const { id } = req.params;
     const { name, surname, birthDate, address, insuranceNumber } = req.body;
-    
-    // I would add a 400 error here that checks all/some data was sent
 
     try {
         const updatedPatient = await Patient.findByIdAndUpdate(

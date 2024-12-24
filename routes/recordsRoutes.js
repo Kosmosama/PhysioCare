@@ -1,6 +1,6 @@
 import express from "express";
-import { ROLES } from "../utils/constants.js";
-import { protectRoute } from "../auth/auth.js";
+// import { ROLES } from "../utils/constants.js";
+// import { protectRoute } from "../auth/auth.js";
 import {
     getRecords,
     getRecord,
