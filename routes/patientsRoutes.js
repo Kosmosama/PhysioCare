@@ -12,13 +12,17 @@ import {
 
 const router = express.Router();
 
-router.get("/find", findPatientsByNameOrSurname);
+// router.get("/find", findPatientsByNameOrSurname);
 
-router.get("/:id", getPatient);
-router.put("/:id", updatePatient);
-router.delete("/:id", deletePatient);
+// router.get("/:id", getPatient);
+// router.put("/:id", updatePatient);
+// router.delete("/:id", deletePatient);
 
-router.get("/", getPatients);
-router.post("/", addPatient);
+// router.get("/", getPatients);
+// router.post("/", addPatient);
+
+router.get("/form", (req, res) => {
+    res.render('pages/patients/patients_form', { title: "algo"});
+});
 
 export default router;

@@ -1,0 +1,165 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #202020;
+    background-image: url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/1462889/pat-back.svg');
+	background-position: center;
+	background-repeat: repeat;
+	background-size: 7%;
+    color: #d3d4d6;
+    position: relative;
+    overflow-x: hidden;
+}
+
+/* Formas decorativas */
+.shape {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(50px);
+    box-shadow: 0 4px 15px rgba(255, 255, 255, 0.1);
+}
+
+.shape-1 {
+    width: 250px;
+    height: 250px;
+    top: -100px;
+    left: -80px;
+}
+
+.shape-2 {
+    width: 400px;
+    height: 400px;
+    bottom: -180px;
+    right: -120px;
+}
+
+.shape-3 {
+    width: 350px;
+    height: 350px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0.3;
+}
+
+/* Navbar centrado */
+nav {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    backdrop-filter: blur(20px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+}
+
+nav .navbar-nav {
+    margin: 0 auto;
+}
+
+nav a {
+    color: #ffffff !important;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+nav a:hover, nav .active {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 5px;
+    color: #ff5722 !important;
+    padding: 5px 10px;
+}
+
+.container {
+    margin-top: 40px;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    backdrop-filter: blur(15px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+}
+
+/* Tabla avanzada */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+table th, table td {
+    padding: 15px;
+    text-align: left;
+}
+
+table th {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+table tr {
+    transition: all 0.3s;
+}
+
+table tr:hover td:not(.delete-cell) {
+    filter: blur(2px);
+}
+
+table tr:hover .edit-icon {
+    opacity: 1;
+}
+
+.delete-cell {
+    text-align: center;
+}
+
+.delete-btn {
+    color: #f44336;
+    font-size: 1.2em;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.delete-btn:hover {
+    transform: scale(1.2);
+}
+
+.edit-icon {
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.circle-img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+/* Formulario avanzado */
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.form-control {
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    padding: 10px;
+    color: #fff;
+    border-radius: 10px;
+}
+
+.form-control:focus {
+    background: rgba(255, 255, 255, 0.15);
+    box-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
+    outline: none;
+}
+
+.btn {
+    background: #00bcd4;
+    border: none;
+    color: #fff;
+    font-weight: bold;
+    transition: background 0.3s;
+}
+
+.btn:hover {
+    background: #0097a7;
+}
