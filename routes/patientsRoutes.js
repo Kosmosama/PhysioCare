@@ -21,8 +21,8 @@ const router = express.Router();
 // router.get("/", getPatients);
 // router.post("/", addPatient);
 
-router.get("/form", (req, res) => {
-    res.render('pages/patients/patients_form', { title: "algo"});
+router.get("/", (req, res) => {
+    res.render('pages/patients/patients_list', { title: "algo"});
 });
 
 export default router;
