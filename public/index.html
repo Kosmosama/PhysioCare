@@ -4,63 +4,82 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome</title>
-    <link rel="stylesheet" href="/public/css/tailwind.css">
-    <link rel="stylesheet" href="/public/css/index.css"/>
+    <title>MyPage</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/public/css/index.css" />
 </head>
 
 <body>
-    <div className="container min-vh-100 d-flex flex-column justify-content-center align-items-center">
-        <h1 className="display-4 mb-5">This Is A Name</h1>
+    <div class="content-wrapper">
+        <div class="container min-vh-100 d-flex flex-column justify-content-center align-items-center">
+            <h1 class="display-4 mb-5">Luis Martinez Gomez</h1>
 
-        <div className="hexagon-container">
-            <a href="/patients" className="hexagon text-decoration-none">
-                <div className="hexagon-bg"></div>
-                <div className="hexagon-content">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"
-                        stroke="currentColor" stroke-width="2" class="mb-2">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M17 20h5M12 20h.01M7 20H2M22 20a4 4 0 00-8 0m-6 0a4 4 0 00-8 0m4-4a4 4 0 100-8 4 4 0 000 8zm10 0a4 4 0 100-8 4 4 0 000 8z" />
-                    </svg>
-                    <div>Patients</div>
-                </div>
-            </a>
+            <div class="hexagon-container">
+                <a href="/patients" class="hexagon text-decoration-none">
+                    <div class="hexagon-bg"
+                        style="background-image: url(https://images.unsplash.com/photo-1551601651-2a8555f1a136?auto=format&fit=crop&q=80)">
+                    </div>
+                    <div class="hexagon-content">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="mb-2">
+                            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                            <circle cx="9" cy="7" r="4" />
+                            <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                        </svg>
+                        <div>Patients</div>
+                    </div>
+                </a>
 
-            <a href="/physios" className="hexagon text-decoration-none">
-                <div className="hexagon-bg"></div>
-                <div className="hexagon-content">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"
-                        stroke="currentColor" stroke-width="2" class="mb-2">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M15 14c.731 0 1.44.107 2.107.305a5.978 5.978 0 00-1.793 1.99A8.028 8.028 0 0015 16a8.028 8.028 0 00-5.314 2.2A6 6 0 0115 14zm-4.2 3.314A8.02 8.02 0 0115 18a8.02 8.02 0 014.2-1.686M12 10c2.21 0 4-1.79 4-4S14.21 2 12 2 8 3.79 8 6s1.79 4 4 4zM20.265 19.265l.734.734a1 1 0 101.415-1.415l-.734-.734a3 3 0 000-2.828l.734-.734a1 1 0 10-1.415-1.415l-.734.734a3 3 0 00-2.828 0l-.734-.734a1 1 0 10-1.415 1.415l.734.734a3 3 0 000 2.828l-.734.734a1 1 0 101.415 1.415l.734-.734a3 3 0 002.828 0zM18 16a2 2 0 110-4 2 2 0 010 4z" />
-                    </svg>
-                    <div>Physios</div>
-                </div>
-            </a>
+                <a href="/physios.html" class="hexagon text-decoration-none">
+                    <div class="hexagon-bg"
+                        style="background-image: url(https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&q=80)">
+                    </div>
+                    <div class="hexagon-content">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="mb-2">
+                            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                            <circle cx="9" cy="7" r="4" />
+                            <path d="M15 6h6" />
+                            <path d="M18 3v6" />
+                        </svg>
+                        <div>Physios</div>
+                    </div>
+                </a>
 
-            <a href="/records" className="hexagon text-decoration-none">
-                <div className="hexagon-bg"></div>
-                <div className="hexagon-content">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"
-                        stroke="currentColor" stroke-width="2" class="mb-2">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6zM14 2v6h6M16 13H8m8 4H8m2-8H8" />
-                    </svg>
-                    <div>Records</div>
-                </div>
-            </a>
+                <a href="/records.html" class="hexagon text-decoration-none">
+                    <div class="hexagon-bg"
+                        style="background-image: url(https://images.unsplash.com/photo-1587300003388-59208cc962cb?auto=format&fit=crop&q=80)">
+                    </div>
+                    <div class="hexagon-content">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="mb-2">
+                            <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z" />
+                            <polyline points="14 2 14 8 20 8" />
+                        </svg>
+                        <div>Records</div>
+                    </div>
+                </a>
 
-            <a href="/login" className="hexagon text-decoration-none">
-                <div className="hexagon-bg"></div>
-                <div className="hexagon-content">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"
-                        stroke="currentColor" stroke-width="2" class="mb-2">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M15 17l5-5m0 0l-5-5m5 5H6m9 4H3a1 1 0 01-1-1V6a1 1 0 011-1h11a1 1 0 011 1v14a1 1 0 01-1 1z" />
-                    </svg>
-                    <div>Login</div>
-                </div>
-            </a>
+                <a href="/login.html" class="hexagon text-decoration-none">
+                    <div class="hexagon-bg"
+                        style="background-image: url(https://images.unsplash.com/photo-1614064641938-3bbee52942c7?auto=format&fit=crop&q=80)">
+                    </div>
+                    <div class="hexagon-content">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="mb-2">
+                            <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />
+                            <polyline points="10 17 15 12 10 7" />
+                            <line x1="15" y1="12" x2="3" y2="12" />
+                        </svg>
+                        <div>Login</div>
+                    </div>
+                </a>
+            </div>
         </div>
     </div>
 </body>
