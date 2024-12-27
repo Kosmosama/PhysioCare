@@ -4,25 +4,23 @@ import express from "express";
 import { 
     getPatients, 
     getPatient, 
-    findPatientsByNameOrSurname, 
-    addPatient,
+    // findPatientsByNameOrSurname, 
+    // addPatient,
     updatePatient,
-    deletePatient
+    deletePatient,
+    editPatient
 } from "../controllers/patientsController.js";
 
 const router = express.Router();
 
+router.get('/edit/:id', editPatient); // Show patient edit form
+router.get("/:id", getPatient); // Show patient details
+router.get("/", getPatients); // Show all patients
+
+router.delete("/:id", deletePatient); // Recieves form POST delete «to delete»
+router.post("/:id", updatePatient); // Recieves form POST «to edit»
+
 // router.get("/find", findPatientsByNameOrSurname);
-
-// router.get("/:id", getPatient);
-// router.put("/:id", updatePatient);
-// router.delete("/:id", deletePatient);
-
-// router.get("/", getPatients);
 // router.post("/", addPatient);
-
-router.get("/", (req, res) => {
-    res.render('pages/patients/patients_list', { title: "algo"});
-});
 
 export default router;

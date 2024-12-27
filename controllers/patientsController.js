@@ -4,84 +4,108 @@ import Patient from "../models/patient.js";
 
 // Returns the list of all patients registered in the clinic
 const getPatients = async (req, res) => {
+    const { name } = req.query;
+
     try {
-        const patients = await Patient.find();
+        let query = {};
 
-        if (patients.length === 0) return res.status(404).json({ error: "No patients found in system." });
+        if (name) {
+            query.name = new RegExp(name, 'i');
+        }
 
-        res.status(200).json({ result: patients });
+        const patients = await Patient.find(query);
+
+        res.render('pages/patients/patients_list', {
+            title: "Patients List",
+            patients,
+            filter: { name }
+        });
     } catch (error) {
-        res.status(500).json({ error: "An error occurred while fetching patients." });
+        res.status(500).render('pages/error', {
+            title: "Error",
+            error: "An error occurred while fetching patients.",
+            code: 500
+        });
     }
 };
 
 // Retrieve details from a specific client
 const getPatient = async (req, res) => {
     const { id } = req.params;
-    // const { id: userId, rol: rol } = req.user;
 
     try {
-        // if (rol === 'patient' && id !== userId) return res.status(403).json({ error: "Forbidden: Patients can only access their own records." });
-        
         const patient = await Patient.findById(id);
 
-        if (!patient) return res.status(404).json({ error: "Patient not found." });
+        if (!patient) {
+            return res.status(404).render('pages/error', {
+                title: "Patient Not Found",
+                error: `No patient found with ID: ${id}`,
+                code: 404
+            });
+        }
 
-        res.status(200).json({ result: patient });
+        res.status(200).render('pages/patients/patient_detail', {
+            title: `Patient Details - ${patient.name} ${patient.surname}`,
+            patient
+        });
     } catch (error) {
-        res.status(500).json({ error: "An error occurred while fetching patient: " + id });
+        res.status(500).render('pages/error', {
+            title: "Error",
+            error: `An error occurred while fetching the patient with ID: ${id}`,
+            code: 500
+        });
     }
 };
 
 // Retrieve patient by name or surname.
-const findPatientsByNameOrSurname = async (req, res) => {
-    const { name, surname } = req.query;
+// const findPatientsByNameOrSurname = async (req, res) => {
+//     const { name, surname } = req.query;
 
-    try {
-        const query = {};
-        if (name || surname) {
-            query.$and = []; 
-            if (name) query.$and.push({ name: { $regex: name, $options: "i" } });
-            if (surname) query.$and.push({ surname: { $regex: surname, $options: "i" } });
-        }
+//     try {
+//         const query = {};
+//         if (name || surname) {
+//             query.$and = []; 
+//             if (name) query.$and.push({ name: { $regex: name, $options: "i" } });
+//             if (surname) query.$and.push({ surname: { $regex: surname, $options: "i" } });
+//         }
 
-        const patients = await Patient.find(query);
+//         const patients = await Patient.find(query);
 
-        if (patients.length === 0) return res.status(404).json({ error: "No patients found with those criteria." });
+//         if (patients.length === 0) return res.status(404).json({ error: "No patients found with those criteria." });
 
-        res.status(200).json({ result: patients });
-    } catch (error) {
-        res.status(500).json({ error: "An error occurred while fetching patients." });
-    }
-};
+//         res.status(200).json({ result: patients });
+//     } catch (error) {
+//         res.status(500).json({ error: "An error occurred while fetching patients." });
+//     }
+// };
 
 // Insert a new patient
-const addPatient = async (req, res) => {
-    const { name, surname, birthDate, address, insuranceNumber, login, password } = req.body;
+// const addPatient = async (req, res) => {
+//     const { name, surname, birthDate, address, insuranceNumber, login, password } = req.body;
 
-    try {
-        // const user = createUser({ login: login, password: password, role: ROLES.PATIENT });
+//     try {
+//         // const user = createUser({ login: login, password: password, role: ROLES.PATIENT });
         
-        const newPatient = new Patient({
-            // _id: user._id,
-            name,
-            surname,
-            birthDate,
-            address,
-            insuranceNumber
-        });
+//         const newPatient = new Patient({
+//             // _id: user._id,
+//             name,
+//             surname,
+//             birthDate,
+//             address,
+//             insuranceNumber
+//         });
         
-        const savedPatient = await newPatient.save();
-        res.status(201).json({ result: savedPatient });
-    } catch (error) {
-        if (error.name === 'ValidationError') return res.status(400).json({ error: "Validation failed: " + error.message });
+//         const savedPatient = await newPatient.save();
+//         res.status(201).json({ result: savedPatient });
+//     } catch (error) {
+//         if (error.name === 'ValidationError') return res.status(400).json({ error: "Validation failed: " + error.message });
         
-        // 11000 -> Trying to duplicate value on unique field
-        if (error.code === 11000) return res.status(400).json({ error: "Insurance number must be unique." });
+//         // 11000 -> Trying to duplicate value on unique field
+//         if (error.code === 11000) return res.status(400).json({ error: "Insurance number must be unique." });
         
-        res.status(400).json({ error: "An error occurred while adding the patient: " + error.message });
-    }
-};
+//         res.status(400).json({ error: "An error occurred while adding the patient: " + error.message });
+//     }
+// };
 
 // Update patient data by ID
 const updatePatient = async (req, res) => {
@@ -94,17 +118,42 @@ const updatePatient = async (req, res) => {
             { name, surname, birthDate, address, insuranceNumber },
             { new: true, runValidators: true }
         );
-        
-        if (!updatedPatient) return res.status(404).json({ error: "Patient not found." });
-        
-        res.status(200).json({ result: updatedPatient });
-    } catch (error) {
-        if (error.name === 'ValidationError') return res.status(400).json({ error: "Validation failed: " + error.message });
-        
-        // 11000 -> Trying to duplicate value on unique field
-        if (error.code === 11000) return res.status(400).json({ error: "Insurance number must be unique." });
 
-        res.status(500).json({ error: "An internal server error occurred while updating the patient." });
+        if (!updatedPatient) {
+            return res.status(404).render('pages/error', {
+                title: "Patient Not Found",
+                error: `No patient found with ID: ${id}`,
+                code: 404
+            });
+        }
+
+        res.status(200).render('pages/patients/patient_detail', {
+            title: `Patient Updated - ${updatedPatient.name} ${updatedPatient.surname}`,
+            patient: updatedPatient,
+            message: "Patient successfully updated!"
+        });
+    } catch (error) {
+        if (error.name === 'ValidationError') {
+            return res.status(400).render('pages/error', {
+                title: "Validation Error",
+                error: `Validation failed: ${error.message}`,
+                code: 400
+            });
+        }
+
+        if (error.code === 11000) {
+            return res.status(400).render('pages/error', {
+                title: "Duplicate Value Error",
+                error: "Insurance number must be unique.",
+                code: 400
+            });
+        }
+
+        res.status(500).render('pages/error', {
+            title: "Internal Server Error",
+            error: `An error occurred while updating the patient with ID: ${id}`,
+            code: 500
+        });
     }
 };
 
@@ -115,12 +164,56 @@ const deletePatient = async (req, res) => {
     try {
         const deletedPatient = await Patient.findByIdAndDelete(id);
 
-        if (!deletedPatient) return res.status(404).json({ error: "Patient not found." });
+        if (!deletedPatient) {
+            return res.status(404).render('pages/error', {
+                title: "Patient Not Found",
+                error: `No patient found with ID: ${id}`,
+                code: 404
+            });
+        }
 
-        res.status(200).json({ result: deletedPatient });
+        // #MAYBE to show a confirmation that the patient has been deleted
+        // res.status(200).render('pages/success', {
+        //     title: "Patient Deleted",
+        //     message: `Patient with ID ${id} has been successfully deleted.`
+        // });
+
+        res.redirect(req.baseUrl);
     } catch (error) {
-        res.status(500).json({ error: "An internal server error occurred while deleting the patient." });
+        res.status(500).render('pages/error', {
+            title: "Internal Server Error",
+            error: `An error occurred while deleting the patient with ID: ${id}`,
+            code: 500
+        });
     }
 };
 
-export { getPatients, getPatient, findPatientsByNameOrSurname, addPatient, updatePatient, deletePatient };
+// Edit patient data by ID
+const editPatient = async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const patient = await Patient.findById(id);
+
+        if (!patient) {
+            return res.status(404).render('pages/error', {
+                title: "Patient Not Found",
+                error: `No patient found with ID: ${id}`,
+                code: 404
+            });
+        }
+
+        res.render('pages/patients/patient_edit', {
+            title: "Edit Patient",
+            patient
+        });
+    } catch (error) {
+        res.status(500).render('pages/error', {
+            title: "Internal Server Error",
+            error: "An error occurred while fetching the patient for editing.",
+            code: 500
+        });
+    }
+};
+
+export { getPatients, getPatient, updatePatient, deletePatient, editPatient }; // , findPatientsByNameOrSurname, addPatient
