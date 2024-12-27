@@ -1,0 +1,30 @@
+{% extends "../../layouts/base.njk" %}
+
+{% block content %}
+<h1>Patient Details</h1>
+
+<table>
+    <tr>
+        <th>Name</th>
+        <td>{{ patient.name }}</td>
+    </tr>
+    <tr>
+        <th>Surname</th>
+        <td>{{ patient.surname }}</td>
+    </tr>
+    <tr>
+        <th>Birth Date</th>
+        <td>{{ patient.birthDate | date('yyyy-MM-dd') }}</td>
+    </tr>
+    <tr>
+        <th>Address</th>
+        <td>{{ patient.address or "Not Provided" }}</td>
+    </tr>
+    <tr>
+        <th>Insurance Number</th>
+        <td>{{ patient.insuranceNumber }}</td>
+    </tr>
+</table>
+
+<a href="/patients">Back to Patient List</a>
+{% endblock %}
