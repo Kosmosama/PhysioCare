@@ -14,10 +14,10 @@ const router = express.Router();
 
 router.get("/find", findRecordsBySurname);
 
-router.post("/:id/appointments", addAppointmentToRecord); // #TODO
+router.post("/:id/appointments", addAppointmentToRecord);
 
 router.get("/:id", getRecord);
-router.delete("/:id", deleteMedicalRecord); // #TODO
+router.delete("/:id", deleteMedicalRecord);
 
 router.get("/", getRecords);
 router.post("/", addRecord);

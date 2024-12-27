@@ -2,8 +2,10 @@ import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import nunjucks from "nunjucks";
+import { format } from 'date-fns';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import methodOverride from 'method-override';
 
 import { checkEnvFile } from "./utils/utils.js";
 // import userRoutes from "./routes/userRoutes.js";
@@ -25,14 +27,28 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 
-nunjucks.configure('views', {
+const env = nunjucks.configure('views', {
     autoescape: true,
     express: app,
     noCache: true
 });
+
+env.addFilter('date', (date, dateFormat) => {
+    if (!date) return '';
+    return format(new Date(date), dateFormat || 'yyyy-mm-dd');
+});
+
 app.set('view engine', 'njk');
 
 app.use(express.json());
+app.use(express.urlencoded({extended: true}));
+app.use(methodOverride(function (req, res) {
+    if (req.body && typeof req.body === 'object' && '_method' in req.body) {
+      let method = req.body._method;
+      delete req.body._method;
+      return method;
+    } 
+}));
 
 app.use('/public', express.static(__dirname + '/public'));
 app.use(express.static(path.join(__dirname, '/node_modules/bootstrap/dist')));
