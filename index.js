@@ -64,3 +64,5 @@ app.use("/records", recordsRoutes);
 app.listen(PORT, () => {
     console.log(`Server is running on \x1b[34mhttp://localhost:${PORT}...\x1b[0m`);
 });
+
+// #TODO Error should be a util
