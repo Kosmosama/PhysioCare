@@ -1,36 +1,56 @@
 import Record from "../models/record.js";
 import Patient from "../models/patient.js";
+import Physio from "../models/physio.js";
 
 // Returns the list of all records registered in the clinic
-// const getRecords = async (req, res) => {
-//     try {
-//         const records = await Record.find();
+const getRecords = async (req, res) => {
+    try {
+        const records = await Record.find().populate('patient', 'name surname');
 
-//         if (records.length === 0) return res.status(404).json({ error: "No records found in system." });
-
-//         res.status(200).json({ result: records });
-//     } catch (error) {
-//         res.status(500).json({ error: "An error occurred while fetching records." });
-//     }
-// };
+        res.render('pages/records/record_list', {
+            title: "Records List",
+            records
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).render('pages/error', {
+            title: "Error",
+            error: "An error occurred while fetching the records.",
+            code: 500
+        });
+    }
+};
 
 // Retrieve details from a specific record
-// const getRecord = async (req, res) => {
-//     const { id } = req.params;
-//     // const { id: userId, rol } = req.user;
+const getRecord = async (req, res) => {
+    const { id } = req.params;
 
-//     try {
-//         // if (rol === 'patient' && id !== userId) return res.status(403).json({ error: "Forbidden: Patients can only access their own records." });
+    try {
+        const record = await Record.findById(id)
+            .populate('patient', 'name surname')
+            .populate('appointments.physio', 'name');
 
-//         const record = await Record.findOne({ patient: id });
+        if (!record) {
+            return res.status(404).render('pages/error', {
+                title: "Record Not Found",
+                error: `No record found with ID: ${id}`,
+                code: 404
+            });
+        }
 
-//         if (!record) return res.status(404).json({ error: "Record not found." });
-
-//         res.status(200).json({ result: record });
-//     } catch (error) {
-//         res.status(500).json({ error: "An error occurred while fetching the record." });
-//     }
-// };
+        res.render('pages/records/record_detail', {
+            title: `Record Details - ${record.patient.name} ${record.patient.surname}`,
+            record
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).render('pages/error', {
+            title: "Error",
+            error: "An error occurred while fetching the record details.",
+            code: 500
+        });
+    }
+};
 
 // Retrieve records by patient surname
 // const findRecordsBySurname = async (req, res) => {
@@ -112,36 +132,72 @@ const createRecord = async (req, res) => {
     }
 };
 
-// Insert a new appointment o a record
-// const addAppointmentToRecord = async (req, res) => {
-//     const { id } = req.params;
-//     const { date, physio, diagnosis, treatment, observations } = req.body;
+// Show new appointment form
+const addAppointment = async (req, res) => {
+    const { id } = req.params;
 
-//     try {
-//         if (isNaN((new Date(date)).getTime())) return res.status(400).json({ error: "Invalid date format." });
-        
-//         const record = await Record.findOne({ patient: id });
+    try {
+        const record = await Record.findById(id).populate("patient");
+        if (!record) {
+            return res.status(404).render("pages/error", {
+                title: "Record Not Found",
+                error: `No record found with ID: ${id}`,
+                code: 404
+            });
+        }
 
-//         if (!record) return res.status(404).json({ error: "Record not found." });
+        const physios = await Physio.find();
 
-//         const newAppointment = {
-//             date: appointmentDate,
-//             physio,
-//             diagnosis,
-//             treatment,
-//             observations
-//         };
-//         record.appointments.push(newAppointment);
+        res.render("pages/records/appointment_add", {
+            title: "Add Appointment",
+            record,
+            physios
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).render("pages/error", {
+            title: "Error",
+            error: "An error occurred while loading the appointment form.",
+            code: 500
+        });
+    }
+};
 
-//         const updatedRecord = await record.save();
+// Add a new appointment to a record
+const addAppointmentToRecord = async (req, res) => {
+    const { id } = req.params;
+    const { date, physio, diagnosis, treatment, observations } = req.body;
 
-//         res.status(201).json({ result: updatedRecord });
-//     } catch (error) {
-//         if (error.name === 'ValidationError') return res.status(400).json({ error: "Validation failed: " + error.error });
+    try {
+        const record = await Record.findById(id);
+        if (!record) {
+            return res.status(404).render('pages/error', {
+                title: "Record Not Found",
+                error: `No record found with ID: ${id}`,
+                code: 404
+            });
+        }
 
-//         res.status(500).json({ error: "An error occurred while updating the record." });
-//     }
-// };
+        record.appointments.push({
+            date,
+            physio,
+            diagnosis,
+            treatment,
+            observations
+        });
+
+        await record.save();
+
+        res.redirect(`/records/${id}`);
+    } catch (error) {
+        console.error(error);
+        res.status(500).render('pages/error', {
+            title: "Error",
+            error: "An error occurred while adding the appointment.",
+            code: 500
+        });
+    }
+}
 
 // Delete record by ID
 // const deleteMedicalRecord = async (req, res) => {
@@ -159,4 +215,4 @@ const createRecord = async (req, res) => {
 // };
 
 // export { getRecords, getRecord, findRecordsBySurname, addRecord, addAppointmentToRecord, deleteMedicalRecord };
-export { addRecord, createRecord};
+export { addRecord, createRecord, getRecords, getRecord, addAppointmentToRecord, addAppointment };

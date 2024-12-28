@@ -2,11 +2,12 @@ import express from "express";
 // import { ROLES } from "../utils/constants.js";
 // import { protectRoute } from "../auth/auth.js";
 import {
-    // getRecords,
-    // getRecord,
+    getRecords,
+    getRecord,
     // findRecordsBySurname,
     addRecord,
-    // addAppointmentToRecord,
+    addAppointmentToRecord,
+    addAppointment,
     // deleteMedicalRecord,
     createRecord
 } from "../controllers/recordsController.js";
@@ -14,14 +15,15 @@ import {
 const router = express.Router();
 
 router.get("/add", createRecord); // Show record creation form
+router.get("/:id/appointments/add", addAppointment); // Show appointment creation form
+router.post("/:id/appointments/add", addAppointmentToRecord);
+
+router.get("/:id", getRecord);
+router.get("/", getRecords); // Show all records
+
 // router.get("/find", findRecordsBySurname);
-
-// router.post("/:id/appointments", addAppointmentToRecord);
-
-// router.get("/:id", getRecord);
 // router.delete("/:id", deleteMedicalRecord);
 
-// router.get("/", getRecords);
-router.post("/", addRecord);
+router.post("/", addRecord); // Form add record
 
 export default router;

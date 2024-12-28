@@ -1,0 +1,43 @@
+{% extends "../../layouts/base.njk" %}
+
+{% block content %}
+    <h1>Add Appointment</h1>
+
+    <h2>Patient Information</h2>
+    <p><strong>Name:</strong> {{ record.patient.name }}</p>
+    <p><strong>Surname:</strong> {{ record.patient.surname }}</p>
+
+    <h2>Appointment Details</h2>
+    <form method="POST" action="/records/{{ record._id }}/appointments/add">
+        <div>
+            <label for="date">Appointment Date:</label>
+            <input type="date" id="date" name="date" required>
+        </div>
+
+        <div>
+            <label for="physio">Physiotherapist:</label>
+            <select id="physio" name="physio" required>
+                <option value="">Select a physiotherapist</option>
+                {% for physio in physios %}
+                    <option value="{{ physio._id }}">{{ physio.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div>
+            <label for="diagnosis">Diagnosis:</label>
+            <textarea id="diagnosis" name="diagnosis" rows="3" minlength="10" maxlength="500" required></textarea>
+        </div>
+        <div>
+            <label for="treatment">Treatment:</label>
+            <textarea id="treatment" name="treatment" rows="3" required></textarea>
+        </div>
+
+        <div>
+            <label for="observations">Observations (Optional):</label>
+            <textarea id="observations" name="observations" rows="3"></textarea>
+        </div>
+
+        <button type="submit" class="button">Add Appointment</button>
+        <a href="/records/{{ record._id }}" class="button">Cancel</a>
+    </form>
+{% endblock %}
