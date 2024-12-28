@@ -1,0 +1,20 @@
+{% extends "../../layouts/base.njk" %}
+
+{% block content %}
+    <h1>Create Medical Record</h1>
+
+    <form method="POST" action="/records">
+        <label for="patientId">Patient ID:</label>
+        <input type="text" id="patientId" name="patientId" placeholder="Enter Patient ID" 
+        value="{{ patientId or '' }}"
+        {% if patientId %}readonly{% endif %}
+        required>
+
+        <label for="medicalRecord">Medical Record:</label>
+        <textarea id="medicalRecord" name="medicalRecord" placeholder="Enter medical record information" maxlength="1000"></textarea>
+
+        <button type="submit" class="button">Add Record</button>
+    </form>
+
+    <a href="/records">Cancel</a>
+{% endblock %}
