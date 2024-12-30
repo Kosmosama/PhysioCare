@@ -4,21 +4,23 @@ import express from "express";
 import { 
     getPhysios,
     getPhysio,
-    findPhysiosBySpecialty,
-    addPhysio,
+    // findPhysiosBySpecialty,
+    // addPhysio,
     updatePhysio,
-    deletePhysio
+    deletePhysio,
+    editPhysio
 } from "../controllers/physiosController.js";
 
 const router = express.Router();
 
-router.get("/find", findPhysiosBySpecialty);
+// router.get("/find", findPhysiosBySpecialty);
 
-router.get("/:id", getPhysio);
-router.put("/:id",  updatePhysio);
-router.delete("/:id",  deletePhysio);
+router.get("/:id", getPhysio); // Show physio details
+router.get('/edit/:id', editPhysio); // Show physio edit form
+router.post("/:id",  updatePhysio); // Recieves form POST «to edit»
+router.delete("/:id",  deletePhysio); // Recieves form POST delete «to delete»
 
-router.get("/", getPhysios);
-router.post("/", addPhysio);
+router.get("/", getPhysios); // Show all physios
+// router.post("/", addPhysio);
 
 export default router;

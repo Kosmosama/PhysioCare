@@ -1,0 +1,28 @@
+{% extends "../../layouts/base.njk" %}
+
+{% block content %}
+<h1>Edit Physio</h1>
+
+<form method="POST" action="/physios/{{ physio._id }}">
+    <label for="name">Name:</label>
+    <input type="text" id="name" name="name" value="{{ physio.name }}" required>
+
+    <label for="surname">Surname:</label>
+    <input type="text" id="surname" name="surname" value="{{ physio.surname }}" required>
+
+    <select id="physio" name="physio" required>
+        <option value="Sports" {% if physio.specialty == "Sports" %}selected{% endif %}>Sports</option>
+        <option value="Neurological" {% if physio.specialty == "Neurological" %}selected{% endif %}>Neurological</option>
+        <option value="Pediatric" {% if physio.specialty == "Pediatric" %}selected{% endif %}>Pediatric</option>
+        <option value="Geriatric" {% if physio.specialty == "Geriatric" %}selected{% endif %}>Geriatric</option>
+        <option value="Oncological" {% if physio.specialty == "Oncological" %}selected{% endif %}>Oncological</option>
+    </select>
+
+    <label for="licenseNumber">License Number:</label>
+    <input type="text" id="licenseNumber" name="licenseNumber" value="{{ physio.licenseNumber }}" required>
+
+    <button type="submit" class="button">Save Changes</button>
+</form>
+
+<a href="/physios/{{ physio._id }}">Cancel</a>
+{% endblock %}

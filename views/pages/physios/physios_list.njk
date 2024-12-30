@@ -1,0 +1,52 @@
+{% extends "../../layouts/base.njk" %}
+
+{% block content %}
+    <h1>Physios List</h1>
+
+    <!-- Search Form -->
+    <form method="GET" action="/physios">
+        <label for="searchName">Search by Name:</label>
+        <input type="text" id="searchName" name="name" value="{{ filter.name or '' }}" placeholder="Enter name">
+
+        <button type="submit" class="button">Search</button>
+    </form>
+
+    {% if physios.length > 0 %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Surname</th>
+                    <th>Specialty</th>
+                    <th>License Number</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for physio in physios %}
+                <tr>
+                    <td>
+                        <!-- Details page -->
+                        <a href="/physios/{{ physio._id }}">{{ physio.name }}</a>
+                    </td>
+                    <td>{{ physio.surname }}</td>
+                    <td>{{ physio.specialty }}</td>
+                    <td>{{ physio.licenseNumber }}</td>
+                    <td>
+                        <!-- Edit button -->
+                        <a href="/physios/edit/{{ physio._id }}" class="button">Edit</a>
+                        
+                        <!-- Delete button -->
+                        <form method="POST" action="/physios/{{ physio._id }}" style="display: inline;">
+                            <input type="hidden" name="_method" value="delete" />
+                            <button type="submit" class="button danger">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No physios available to display.</p>
+    {% endif %}
+{% endblock %}

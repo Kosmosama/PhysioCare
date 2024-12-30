@@ -7,7 +7,7 @@ const getRecords = async (req, res) => {
     try {
         const records = await Record.find().populate('patient', 'name surname');
 
-        res.render('pages/records/record_list', {
+        res.render('pages/records/records_list', {
             title: "Records List",
             records
         });
