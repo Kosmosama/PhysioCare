@@ -1,4 +1,5 @@
 import express from "express";
+import uploads from "../utils/uploads.js";
 // import { ROLES } from "../utils/constants.js";
 // import { protectRoute } from "../auth/auth.js";
 import { 
@@ -17,7 +18,7 @@ const router = express.Router();
 
 router.get("/:id", getPhysio); // Show physio details
 router.get('/edit/:id', editPhysio); // Show physio edit form
-router.post("/:id",  updatePhysio); // Recieves form POST «to edit»
+router.post("/:id", uploads.upload.single('image'), updatePhysio); // Recieves form POST «to edit»
 router.delete("/:id",  deletePhysio); // Recieves form POST delete «to delete»
 
 router.get("/", getPhysios); // Show all physios

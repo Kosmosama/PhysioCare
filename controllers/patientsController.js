@@ -113,9 +113,15 @@ const updatePatient = async (req, res) => {
     const { name, surname, birthDate, address, insuranceNumber } = req.body;
 
     try {
+        const updateData = { name, surname, birthDate, address, insuranceNumber };
+
+        if (req.file) {
+            updateData.image = `/public/uploads/${req.file.filename}`;
+        }
+
         const updatedPatient = await Patient.findByIdAndUpdate(
             id,
-            { name, surname, birthDate, address, insuranceNumber },
+            updateData,
             { new: true, runValidators: true }
         );
 

@@ -15,6 +15,7 @@
         <table>
             <thead>
                 <tr>
+                    <th>Image</th>
                     <th>Name</th>
                     <th>Surname</th>
                     <th>Birth Date</th>
@@ -26,6 +27,14 @@
             <tbody>
                 {% for patient in patients %}
                 <tr>
+                    <td>
+                        <!-- Image -->
+                        {% if patient.image %}
+                            <img src="{{ patient.image }}" alt="Patient Image" />
+                        {% else %}
+                            No Image
+                        {% endif %}
+                    </td>
                     <td>
                         <!-- Details page -->
                         <a href="/patients/{{ patient._id }}">{{ patient.name }}</a>

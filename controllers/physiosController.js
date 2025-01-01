@@ -104,9 +104,15 @@ const updatePhysio = async (req, res) => {
     const { name, surname, specialty, licenseNumber } = req.body;
 
     try {
+        const updateData = { name, surname, specialty, licenseNumber };
+
+        if (req.file) {
+            updateData.image = `/public/uploads/${req.file.filename}`;
+        }
+
         const updatedPhysio = await Physio.findByIdAndUpdate(
             id,
-            { name, surname, specialty, licenseNumber },
+            updateData,
             { new: true, runValidators: true }
         );
 
@@ -135,7 +141,7 @@ const updatePhysio = async (req, res) => {
         if (error.code === 11000) {
             return res.status(400).render('pages/error', {
                 title: "Duplicate Value Error",
-                error: "Insurance number must be unique.",
+                error: "License number must be unique.",
                 code: 400
             });
         }

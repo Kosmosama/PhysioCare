@@ -4,6 +4,12 @@
 <h1>Physio Details</h1>
 
 <table>
+    {% if physio.image %}
+    <tr>
+        <th>Image</th>
+        <td><img src="{{ physio.image }}" alt="Physio Image" /></td>
+    </tr>
+    {% endif %}
     <tr>
         <th>Name</th>
         <td>{{ physio.name }}</td>

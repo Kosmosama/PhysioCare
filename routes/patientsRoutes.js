@@ -18,7 +18,7 @@ router.get("/:id", getPatient); // Show patient details
 router.get("/", getPatients); // Show all patients
 
 router.delete("/:id", deletePatient); // Recieves form POST delete «to delete»
-router.post("/:id", updatePatient); // Recieves form POST «to edit»
+router.post("/:id", uploads.upload.single('image'), updatePatient); // Recieves form POST «to edit»
 
 // router.get("/find", findPatientsByNameOrSurname);
 // router.post("/", addPatient);

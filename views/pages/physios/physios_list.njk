@@ -15,6 +15,7 @@
         <table>
             <thead>
                 <tr>
+                    <th>Image</th>
                     <th>Name</th>
                     <th>Surname</th>
                     <th>Specialty</th>
@@ -25,6 +26,14 @@
             <tbody>
                 {% for physio in physios %}
                 <tr>
+                    <td>
+                        <!-- Image -->
+                        {% if physio.image %}
+                            <img src="{{ physio.image }}" alt="Physio Image" />
+                        {% else %}
+                            No Image
+                        {% endif %}
+                    </td>
                     <td>
                         <!-- Details page -->
                         <a href="/physios/{{ physio._id }}">{{ physio.name }}</a>
