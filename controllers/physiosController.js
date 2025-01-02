@@ -130,19 +130,33 @@ const updatePhysio = async (req, res) => {
             message: "Physio successfully updated!"
         });
     } catch (error) {
-        if (error.name === 'ValidationError') {
-            return res.status(400).render('pages/error', {
-                title: "Validation Error",
-                error: `Validation failed: ${error.message}`,
-                code: 400
-            });
-        }
+        const errors = { general: "An error occurred while updating the physio." };
 
-        if (error.code === 11000) {
-            return res.status(400).render('pages/error', {
-                title: "Duplicate Value Error",
-                error: "License number must be unique.",
-                code: 400
+        if (error.name === 'ValidationError' || error.code === 11000) {
+
+            if (error.errors) {
+                if (error.errors.name) {
+                    errors.name = error.errors.name.message;
+                }
+                if (error.errors.surname) {
+                    errors.surname = error.errors.surname.message;
+                }
+                if (error.errors.specialty) {
+                    errors.specialty = error.errors.specialty.message;
+                }
+                if (error.errors.licenseNumber) {
+                    errors.licenseNumber = error.errors.licenseNumber.message;
+                }
+            }
+
+            if (error.code === 11000) {
+                errors.licenseNumber = "License number must be unique.";
+            }
+
+            return res.render('pages/physios/edit_physio', {
+                title: "Edit Physio - Validation Error",
+                physio: { _id: id, name, surname, specialty, licenseNumber },
+                errors
             });
         }
 

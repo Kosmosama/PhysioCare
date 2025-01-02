@@ -6,17 +6,26 @@
 <form method="POST" action="/physios/{{ physio._id }}" enctype="multipart/form-data">
     <div class="form-group">
         <label for="name">Name:</label>
+        {% if errors.name %}
+            <p class="text-danger">{{ errors.name }}</p>
+        {% endif %}
         <input type="text" id="name" name="name" value="{{ physio.name }}" required>
     </div>
 
     <div class="form-group">
         <label for="surname">Surname:</label>
+        {% if errors.surname %}
+            <p class="text-danger">{{ errors.surname }}</p>
+        {% endif %}
         <input type="text" id="surname" name="surname" value="{{ physio.surname }}" required>
     </div>
 
     <div class="form-group">
-        <label for="physio">Specialty:</label>
-        <select id="physio" name="physio" required>
+        <label for="specialty">Specialty:</label>
+        {% if errors.specialty %}
+            <p class="text-danger">{{ errors.specialty }}</p>
+        {% endif %}
+        <select id="specialty" name="specialty" required>
             <option value="Sports" {% if physio.specialty == "Sports" %}selected{% endif %}>Sports</option>
             <option value="Neurological" {% if physio.specialty == "Neurological" %}selected{% endif %}>Neurological</option>
             <option value="Pediatric" {% if physio.specialty == "Pediatric" %}selected{% endif %}>Pediatric</option>
@@ -27,6 +36,9 @@
 
     <div class="form-group">
         <label for="licenseNumber">License Number:</label>
+        {% if errors.licenseNumber %}
+            <p class="text-danger">{{ errors.licenseNumber }}</p>
+        {% endif %}
         <input type="text" id="licenseNumber" name="licenseNumber" value="{{ physio.licenseNumber }}" required>
     </div>
 
