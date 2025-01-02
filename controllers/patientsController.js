@@ -139,19 +139,36 @@ const updatePatient = async (req, res) => {
             message: "Patient successfully updated!"
         });
     } catch (error) {
-        if (error.name === 'ValidationError') {
-            return res.status(400).render('pages/error', {
-                title: "Validation Error",
-                error: `Validation failed: ${error.message}`,
-                code: 400
-            });
-        }
+        const errors = { general: "An error occurred while updating the patient." };
 
-        if (error.code === 11000) {
-            return res.status(400).render('pages/error', {
-                title: "Duplicate Value Error",
-                error: "Insurance number must be unique.",
-                code: 400
+        if (error.name === 'ValidationError' || error.code === 11000) {
+    
+            if (error.errors) {
+                if (error.errors.name) {
+                    errors.name = error.errors.name.message;
+                }
+                if (error.errors.surname) {
+                    errors.surname = error.errors.surname.message;
+                }
+                if (error.errors.birthDate) {
+                    errors.birthDate = error.errors.birthDate.message;
+                }
+                if (error.errors.insuranceNumber) {
+                    errors.insuranceNumber = error.errors.insuranceNumber.message;
+                }
+                if (error.errors.address) {
+                    errors.address = error.errors.address.message;
+                }
+            }
+    
+            if (error.code === 11000) {
+                errors.insuranceNumber = "Insurance number must be unique.";
+            }
+    
+            return res.render('pages/patients/edit_patient', {
+                title: "Edit Patient - Validation Error",
+                patient: { _id: id, name, surname, birthDate, address, insuranceNumber },
+                errors
             });
         }
 
