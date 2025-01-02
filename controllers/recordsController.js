@@ -85,12 +85,14 @@ const addRecord = async (req, res) => {
             });
         }
 
+        // #TODO Button won't show if record already exists // Could also be checked with the error 11000
         const existingRecord = await Record.findOne({ patient: patientId });
         if (existingRecord) {
-            return res.status(400).render('pages/error', {
+            return res.status(400).render('pages/records/record_add', {
                 title: "Record Already Exists",
                 error: `A record already exists for the patient with ID: ${patientId}`,
-                code: 400
+                patientId,
+                medicalRecord
             });
         }
 
@@ -104,7 +106,21 @@ const addRecord = async (req, res) => {
 
         res.status(200).redirect(`/patients/${patientId}`);
     } catch (error) {
-        console.error(error);
+        const errors = { general: "An error occurred while creating the record." };
+
+        if (error.name === 'ValidationError') {
+            // Patient id will be autocomepleted and read-only, but just in case i guess
+            if (error.errors.patient) errors.patient = error.errors.patient.message;
+            if (error.errors.medicalRecord) errors.medicalRecord = error.errors.medicalRecord.message;
+        
+            res.status(400).render('pages/records/record_add', {
+                title: "Validation Error",
+                errors,
+                patientId,
+                medicalRecord
+            });
+        }
+
         res.status(500).render('pages/error', {
             title: "Error",
             error: "An error occurred while adding the medical record.",
@@ -178,26 +194,48 @@ const addAppointmentToRecord = async (req, res) => {
             });
         }
 
-        record.appointments.push({
+        const appointment = {
             date,
             physio,
             diagnosis,
             treatment,
             observations
+        };
+
+        record.appointments.push({
+            appointment
         });
 
         await record.save();
 
         res.redirect(`/records/${id}`);
     } catch (error) {
-        console.error(error);
+        const errors = { general: "An error occurred while adding the appointment." };
+        const physios = await Physio.find();
+
+        if (error.name === 'ValidationError') {
+            if (error.errors.date) errors.date = error.errors.date.message;
+            if (error.errors.physio) errors.physio = error.errors.physio.message;
+            if (error.errors.diagnosis) errors.diagnosis = error.errors.diagnosis.message;
+            if (error.errors.treatment) errors.treatment = error.errors.treatment.message;
+            if (error.errors.observations) errors.observations = error.errors.observations.message;
+        
+            res.status(400).render('pages/records/record_add', {
+                title: "Validation Error",
+                error: errors,
+                appointment,
+                record,
+                physios
+            });
+        }
+
         res.status(500).render('pages/error', {
             title: "Error",
             error: "An error occurred while adding the appointment.",
             code: 500
         });
     }
-}
+};
 
 // Delete record by ID
 // const deleteMedicalRecord = async (req, res) => {

@@ -4,14 +4,28 @@
     <h1>Create Medical Record</h1>
 
     <form method="POST" action="/records">
-        <label for="patientId">Patient ID:</label>
-        <input type="text" id="patientId" name="patientId" placeholder="Enter Patient ID" 
-        value="{{ patientId or '' }}"
-        {% if patientId %}readonly{% endif %}
-        required>
-
-        <label for="medicalRecord">Medical Record:</label>
-        <textarea id="medicalRecord" name="medicalRecord" placeholder="Enter medical record information" maxlength="1000"></textarea>
+        <div class="form-group">
+            <label for="patientId">Patient ID:</label>
+            {% if errors.patient %}
+                <div class="alert alert-danger">
+                    <p>{{ errors.patient }}</p>
+                </div>
+            {% endif %}
+            <input type="text" id="patientId" name="patientId" placeholder="Enter Patient ID" 
+            value="{{ patientId }}"
+            {% if patientId %}readonly{% endif %}
+            required>
+        </div>
+        
+        <div class="form-group">
+            <label for="medicalRecord">Medical Record:</label>
+            {% if errors.medicalRecord %}
+                <div class="alert alert-danger">
+                    <p>{{ errors.medicalRecord }}</p>
+                </div>
+            {% endif %}
+            <textarea id="medicalRecord" name="medicalRecord" placeholder="Enter medical record information" maxlength="1000">{{ medicalRecord or '' }}</textarea>
+        </div>
 
         <button type="submit" class="button">Add Record</button>
     </form>

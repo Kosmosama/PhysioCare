@@ -9,32 +9,59 @@
 
     <h2>Appointment Details</h2>
     <form method="POST" action="/records/{{ record._id }}/appointments/add">
-        <div>
+        <div class="form-group">
             <label for="date">Appointment Date:</label>
-            <input type="date" id="date" name="date" required>
+            {% if errors.physio %}
+                <div class="alert alert-danger">
+                    <p>{{ errors.physio }}</p>
+                </div>
+            {% endif %}
+            <input type="date" id="date" name="date" required value="{{ appointment.date or '' }}">
         </div>
 
-        <div>
+        <div class="form-group">
             <label for="physio">Physiotherapist:</label>
+            {% if errors.diagnosis %}
+                <div class="alert alert-danger">
+                    <p>{{ errors.diagnosis }}</p>
+                </div>
+            {% endif %}
             <select id="physio" name="physio" required>
-                <option value="">Select a physiotherapist</option>
+                <option value="" {% if not appointment.physio %}selected{% endif %}>Select a physiotherapist</option>
                 {% for physio in physios %}
-                    <option value="{{ physio._id }}">{{ physio.name }}</option>
+                    <option value="{{ physio._id }}" {% if appointment.physio == physio._id %}selected{% endif %}>{{ physio.name }}</option>
                 {% endfor %}
             </select>
         </div>
-        <div>
+
+        <div class="form-group">
             <label for="diagnosis">Diagnosis:</label>
-            <textarea id="diagnosis" name="diagnosis" rows="3" minlength="10" maxlength="500" required></textarea>
-        </div>
-        <div>
-            <label for="treatment">Treatment:</label>
-            <textarea id="treatment" name="treatment" rows="3" required></textarea>
+            {% if errors.diagnosis %}
+                <div class="alert alert-danger">
+                    <p>{{ errors.diagnosis }}</p>
+                </div>
+            {% endif %}
+            <textarea id="diagnosis" name="diagnosis" rows="3" minlength="10" maxlength="500" required value="{{ appointment.diagnosis or '' }}"></textarea>
         </div>
 
-        <div>
+        <div class="form-group">
+            <label for="treatment">Treatment:</label>
+            {% if errors.treatment %}
+                <div class="alert alert-danger">
+                    <p>{{ errors.treatment }}</p>
+                </div>
+            {% endif %}
+            <textarea id="treatment" name="treatment" rows="3" required value="{{ appointment.treatment or '' }}"></textarea>
+        </div>
+
+        <div class="form-group">
             <label for="observations">Observations (Optional):</label>
-            <textarea id="observations" name="observations" rows="3"></textarea>
+            {% if errors.observations %}
+                <div class="alert alert-danger">
+                    <p>{{ errors.observations }}</p>
+                </div>
+            {% endif %}
+            <textarea id="observations" name="observations" rows="3" value="{{ appointment.observations or '' }}"></textarea>
         </div>
 
         <button type="submit" class="button">Add Appointment</button>
