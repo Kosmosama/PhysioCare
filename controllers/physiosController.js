@@ -133,25 +133,14 @@ const updatePhysio = async (req, res) => {
         const errors = { general: "An error occurred while updating the physio." };
 
         if (error.name === 'ValidationError' || error.code === 11000) {
-
             if (error.errors) {
-                if (error.errors.name) {
-                    errors.name = error.errors.name.message;
-                }
-                if (error.errors.surname) {
-                    errors.surname = error.errors.surname.message;
-                }
-                if (error.errors.specialty) {
-                    errors.specialty = error.errors.specialty.message;
-                }
-                if (error.errors.licenseNumber) {
-                    errors.licenseNumber = error.errors.licenseNumber.message;
-                }
+                if (error.errors.name) errors.name = error.errors.name.message;
+                if (error.errors.surname) errors.surname = error.errors.surname.message;
+                if (error.errors.specialty) errors.specialty = error.errors.specialty.message;
+                if (error.errors.licenseNumber) errors.licenseNumber = error.errors.licenseNumber.message;
             }
 
-            if (error.code === 11000) {
-                errors.licenseNumber = "License number must be unique.";
-            }
+            if (error.code === 11000) errors.licenseNumber = "License number must be unique.";
 
             return res.render('pages/physios/edit_physio', {
                 title: "Edit Physio - Validation Error",

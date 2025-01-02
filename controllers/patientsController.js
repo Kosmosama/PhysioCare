@@ -142,28 +142,15 @@ const updatePatient = async (req, res) => {
         const errors = { general: "An error occurred while updating the patient." };
 
         if (error.name === 'ValidationError' || error.code === 11000) {
-    
             if (error.errors) {
-                if (error.errors.name) {
-                    errors.name = error.errors.name.message;
-                }
-                if (error.errors.surname) {
-                    errors.surname = error.errors.surname.message;
-                }
-                if (error.errors.birthDate) {
-                    errors.birthDate = error.errors.birthDate.message;
-                }
-                if (error.errors.insuranceNumber) {
-                    errors.insuranceNumber = error.errors.insuranceNumber.message;
-                }
-                if (error.errors.address) {
-                    errors.address = error.errors.address.message;
-                }
+                if (error.errors.name) errors.name = error.errors.name.message;
+                if (error.errors.surname) errors.surname = error.errors.surname.message;
+                if (error.errors.birthDate) errors.birthDate = error.errors.birthDate.message;
+                if (error.errors.insuranceNumber) errors.insuranceNumber = error.errors.insuranceNumber.message;
+                if (error.errors.address) errors.address = error.errors.address.message;
             }
     
-            if (error.code === 11000) {
-                errors.insuranceNumber = "Insurance number must be unique.";
-            }
+            if (error.code === 11000) errors.insuranceNumber = "Insurance number must be unique.";
     
             return res.render('pages/patients/edit_patient', {
                 title: "Edit Patient - Validation Error",
