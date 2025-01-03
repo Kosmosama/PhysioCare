@@ -4,25 +4,20 @@ import express from "express";
 import {
     getRecords,
     getRecord,
-    // findRecordsBySurname,
     addRecord,
     addAppointmentToRecord,
     addAppointment,
-    // deleteMedicalRecord,
     createRecord
 } from "../controllers/recordsController.js";
 
 const router = express.Router();
 
 router.get("/new", createRecord); // Show record creation form
-router.get("/:id/appointments/add", addAppointment); // Show appointment creation form
-router.post("/:id/appointments/add", addAppointmentToRecord);
+router.get("/:id/appointments/new", addAppointment); // Show appointment creation form
+router.post("/:id/appointments", addAppointmentToRecord); // Add appointment to record
 
-router.get("/:id", getRecord);
+router.get("/:id", getRecord); // Show record details
 router.get("/", getRecords); // Show all records
-
-// router.get("/find", findRecordsBySurname);
-// router.delete("/:id", deleteMedicalRecord);
 
 router.post("/", addRecord); // Form add record
 
