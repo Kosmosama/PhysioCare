@@ -1,4 +1,6 @@
 import Physio from "../models/physio.js";
+import User from "../models/user.js";
+import { ROLES } from "../utils/constants.js";
 
 // Returns the list of all physios registered in the clinic
 const getPhysios = async (req, res) => {
@@ -74,29 +76,83 @@ const getPhysio = async (req, res) => {
 //     }
 // }
 
+// Show add physio form
+const showPhysioAddForm = (req, res) => {
+    res.render('pages/physios/add_physio', {
+        title: "Add Physio"
+    });
+};
+
 // Insert a new physio
-// const addPhysio = async (req, res) => {
-//     const { name, surname, specialty, licenseNumber } = req.body;
+const addPhysio = async (req, res) => {
+    const { name, surname, specialty, licenseNumber, login, password } = req.body;
 
-//     try {
-//         const newPhysio = new Physio({
-//             name,
-//             surname,
-//             specialty,
-//             licenseNumber
-//         });
+    try {
+        let image = null;
+        if (req.file) {
+            image = `/public/uploads/${req.file.filename}`;
+        }
+        
+        const newUser = new User({
+            login: login,
+            password: password,
+            rol: ROLES.PHYSIO
+        });
+        
+        await newUser.save();
+        
+        const newPhysio = new Physio({
+            _id: newUser._id,
+            name,
+            surname,
+            specialty,
+            licenseNumber,
+            image
+        });
+        
+        const savedPhysio = await newPhysio.save();
 
-//         const savedPhysio = await newPhysio.save();
-//         res.status(201).json({ result: savedPhysio });
-//     } catch (error) {
-//         if (error.name === 'ValidationError') return res.status(400).json({ error: "Validation failed: " + error.message });
-        
-//         // 11000 -> Trying to duplicate value on unique field
-//         if (error.code === 11000) return res.status(400).json({ error: "License number must be unique." });
-        
-//         res.status(400).json({ error: "An error occurred while adding the physio: " + error.message });
-//     }
-// };
+        res.status(201).render('pages/physios/physio_detail', {
+            title: `Physio Added - ${savedPhysio.name} ${savedPhysio.surname}`,
+            physio: savedPhysio,
+            message: "Physio successfully added!"
+        });
+    } catch (error) {
+        const errors = { general: "An error occurred while creating the physio." };
+
+        if (error.name === 'ValidationError' || error.code === 11000) {
+            if (error.errors) {
+                if (error.errors.name) errors.name = error.errors.name.message;
+                if (error.errors.surname) errors.surname = error.errors.surname.message;
+                if (error.errors.specialty) errors.specialty = error.errors.specialty.message;
+                if (error.errors.licenseNumber) errors.licenseNumber = error.errors.licenseNumber.message;
+                if (error.errors.login) errors.login = error.errors.login.message;
+                if (error.errors.password) errors.password = error.errors.password.message;
+            }
+
+            if (error.code === 11000) {
+                if (error.message.includes('licenseNumber')) {
+                    errors.licenseNumber = "License number must be unique.";
+                }
+                if (error.message.includes('login')) {
+                    errors.login = "Login must be unique.";
+                }
+            }
+
+            return res.render('pages/physios/add_physio', {
+                title: "Add Physio - Validation Error",
+                physio: { name, surname, birthDate, address, insuranceNumber, login },
+                errors
+            });
+        }
+
+        res.status(500).render('pages/error', {
+            title: "Internal Server Error",
+            error: "An error occurred while adding the physio.",
+            code: 500
+        });
+    }
+};
 
 // Update physio data by ID
 const updatePhysio = async (req, res) => {
@@ -144,7 +200,7 @@ const updatePhysio = async (req, res) => {
 
             return res.render('pages/physios/edit_physio', {
                 title: "Edit Physio - Validation Error",
-                physio: { _id: id, name, surname, specialty, licenseNumber },
+                physio: { _id: id, name, surname, specialty, licenseNumber, login },
                 errors
             });
         }
@@ -216,4 +272,4 @@ const deletePhysio = async (req, res) => {
     }
 };
 
-export { getPhysios, getPhysio, deletePhysio, editPhysio, updatePhysio }; // findPhysiosBySpecialty, addPhysio,
+export { getPhysios, getPhysio, deletePhysio, editPhysio, updatePhysio, addPhysio, showPhysioAddForm };
