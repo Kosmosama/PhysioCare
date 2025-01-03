@@ -1,40 +1,49 @@
 {% extends "../../layouts/base.njk" %}
 
 {% block content %}
-<h1>Records List</h1>
+    <h1>Records List</h1>
 
-{% if records.length > 0 %}
-    <table>
-        <thead>
-            <tr>
-                <th>Patient Name</th>
-                <th>Patient Surname</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for record in records %}
-            <tr>
-                <td>{{ record.patient.name }}</td>
-                <td>{{ record.patient.surname }}</td>
-                <td>
-                    <!-- View Details Button -->
-                    <a href="/records/{{ record._id }}" class="button">View Details</a>
+    <!-- Search Form -->
+    {# #TODO Make this a reusable component and add it to menu.njk #}
+    <form method="GET" action="/records/">
+        <label for="searchSurname">Search by Surname:</label>
+        <input type="text" id="searchSurname" name="surname" value="{{ filter.surname or '' }}" placeholder="Enter surname">
 
-                    <!-- Add Appointment Button -->
-                    <a href="/records/{{ record._id }}/appointments/add" class="button">Add Appointment</a>
+        <button type="submit" class="button">Search</button>
+    </form>
 
-                    <!-- Delete Button -->
-                    <form method="POST" action="/records/{{ record._id }}" style="display: inline;">
-                        <input type="hidden" name="_method" value="delete" />
-                        <button type="submit" class="button danger">Delete</button>
-                    </form>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-{% else %}
-    <p>No records available to display.</p>
-{% endif %}
+    {% if records.length > 0 %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Patient Name</th>
+                    <th>Patient Surname</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for record in records %}
+                <tr>
+                    <td>{{ record.patient.name }}</td>
+                    <td>{{ record.patient.surname }}</td>
+                    <td>
+                        <!-- View Details Button -->
+                        <a href="/records/{{ record._id }}" class="button">View Details</a>
+
+                        <!-- Add Appointment Button -->
+                        <a href="/records/{{ record._id }}/appointments/add" class="button">Add Appointment</a>
+
+                        <!-- Delete Button -->
+                        <form method="POST" action="/records/{{ record._id }}" style="display: inline;">
+                            <input type="hidden" name="_method" value="delete" />
+                            <button type="submit" class="button danger">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No records available to display.</p>
+    {% endif %}
 {% endblock %}

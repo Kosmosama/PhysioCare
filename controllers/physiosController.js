@@ -12,6 +12,14 @@ const getPhysios = async (req, res) => {
 
         const physios = await Physio.find(query);
 
+        if (physios.length === 0) {
+            return res.status(404).render('pages/error', {
+                title: "Physios Not Found",
+                error: "No physios found with those criteria.",
+                code: 404
+            });
+        }
+
         res.render('pages/physios/physios_list', {
             title: "Physios List",
             physios,

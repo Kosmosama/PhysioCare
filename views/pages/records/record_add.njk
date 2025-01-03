@@ -5,16 +5,24 @@
 
     <form method="POST" action="/records">
         <div class="form-group">
-            <label for="patientId">Patient ID:</label>
+            <label for="patientId">Patient:</label>
             {% if errors.patient %}
                 <div class="alert alert-danger">
                     <p>{{ errors.patient }}</p>
                 </div>
             {% endif %}
-            <input type="text" id="patientId" name="patientId" placeholder="Enter Patient ID" 
-            value="{{ patientId }}"
-            {% if patientId %}readonly{% endif %}
-            required>
+            <select id="patientId" name="patientId" required {% if patientId and not errors %}disabled{% endif %}>
+                <option value="">Select a patient</option>
+                {% for patient in patients %}
+                    <option value="{{ patient._id }}" 
+                        {% if patientId and patient._id == patientId %}selected{% endif %}>
+                        {{ patient.name }} {{ patient.surname }}
+                    </option>
+                {% endfor %}
+            </select>
+            {% if patientId %}
+                <input type="hidden" name="patientId" value="{{ patientId }}">
+            {% endif %}
         </div>
         
         <div class="form-group">

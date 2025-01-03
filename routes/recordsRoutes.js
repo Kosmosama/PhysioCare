@@ -14,7 +14,7 @@ import {
 
 const router = express.Router();
 
-router.get("/add", createRecord); // Show record creation form
+router.get("/new", createRecord); // Show record creation form
 router.get("/:id/appointments/add", addAppointment); // Show appointment creation form
 router.post("/:id/appointments/add", addAppointmentToRecord);
 

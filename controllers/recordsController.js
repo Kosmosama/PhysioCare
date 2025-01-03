@@ -4,15 +4,35 @@ import Physio from "../models/physio.js";
 
 // Returns the list of all records registered in the clinic
 const getRecords = async (req, res) => {
+    const { surname } = req.query; // There might not be a surname, so it's not required
+
     try {
-        const records = await Record.find().populate('patient', 'name surname');
+        let query = {};
+        if (surname) query.surname = surname;
+
+        const records = await Record.find().populate({
+            path: 'patient',
+            match: query,
+            select: 'name surname',
+        });
+
+        // Filter out records where the patient did not match the filter (not matching records will have patient as null)
+        const filteredRecords = records.filter(record => record.patient);
+
+        if (filteredRecords.length === 0) {
+            return res.status(404).render('pages/error', {
+                title: "Records Not Found",
+                error: "No records found with those criteria.",
+                code: 404
+            });
+        }
 
         res.render('pages/records/records_list', {
             title: "Records List",
-            records
+            filteredRecords,
+            filter: { surname }
         });
     } catch (error) {
-        console.error(error);
         res.status(500).render('pages/error', {
             title: "Error",
             error: "An error occurred while fetching the records.",
@@ -43,7 +63,6 @@ const getRecord = async (req, res) => {
             record
         });
     } catch (error) {
-        console.error(error);
         res.status(500).render('pages/error', {
             title: "Error",
             error: "An error occurred while fetching the record details.",
@@ -51,25 +70,6 @@ const getRecord = async (req, res) => {
         });
     }
 };
-
-// Retrieve records by patient surname
-// const findRecordsBySurname = async (req, res) => {
-//     const { surname } = req.query;
-    
-//     try {
-//         const patients = await Patient.find({ surname: surname }).select('_id');
-        
-//         if (patients.length === 0) return res.status(404).json({ error: "No records found for the patient(s) with that surname." });
-
-//         const patientIds = patients.map(patient => patient._id);
-
-//         const records = await Record.find({ patient: { $in: patientIds } }).populate("patient");
-
-//         res.status(200).json({ result: records });
-//     } catch (error) {
-//         res.status(500).json({ error: "An error occurred while fetching records." });
-//     }
-// };
 
 // Insert a new record
 const addRecord = async (req, res) => {
@@ -104,17 +104,18 @@ const addRecord = async (req, res) => {
 
         await newRecord.save();
 
-        res.status(200).redirect(`/patients/${patientId}`);
+        res.status(200).redirect(`/records`);
     } catch (error) {
         const errors = { general: "An error occurred while creating the record." };
 
-        if (error.name === 'ValidationError') {
-            // Patient id will be autocomepleted and read-only, but just in case i guess
+        if (error.name === 'ValidationError' || error.code === 11000) {
             if (error.errors.patient) errors.patient = error.errors.patient.message;
             if (error.errors.medicalRecord) errors.medicalRecord = error.errors.medicalRecord.message;
         
+            if (error.code === 11000) errors.patient = "A record already exists for this patient.";
+
             res.status(400).render('pages/records/record_add', {
-                title: "Validation Error",
+                title: "Add Medical Record - Validation Error",
                 errors,
                 patientId,
                 medicalRecord
@@ -134,12 +135,40 @@ const createRecord = async (req, res) => {
     const { patientId } = req.query;
 
     try {
+        // SELECT p.id AS _id, p.name, p.surname
+        // FROM patients p
+        // LEFT JOIN records r
+        // ON p.id = r.patient
+        // WHERE r.patient IS NULL;
+        const patientsWithoutRecords = await Patient.aggregate([
+            {
+                $lookup: {
+                    from: "records",
+                    localField: "_id",
+                    foreignField: "patient",
+                    as: "record"
+                }
+            },
+            {
+                $match: {
+                    record: { $size: 0 }
+                }
+            },
+            {
+                $project: {
+                    _id: 1,
+                    name: 1,
+                    surname: 1
+                }
+            }
+        ]);
+
         res.render('pages/records/record_add', {
             title: "Add Medical Record",
-            patientId: patientId || null
+            patientId: patientId || null,
+            patientsWithoutRecords
         });
     } catch (error) {
-        console.error(error);
         res.status(500).render('pages/error', {
             title: "Error",
             error: "An error occurred while loading the form.",
@@ -170,7 +199,6 @@ const addAppointment = async (req, res) => {
             physios
         });
     } catch (error) {
-        console.error(error);
         res.status(500).render("pages/error", {
             title: "Error",
             error: "An error occurred while loading the appointment form.",
@@ -237,20 +265,4 @@ const addAppointmentToRecord = async (req, res) => {
     }
 };
 
-// Delete record by ID
-// const deleteMedicalRecord = async (req, res) => {
-//     const { id } = req.params;
-    
-//     try {
-//         const deletedRecord = await Record.findOneAndDelete({ patient: id });
-
-//         if (!deletedRecord) return res.status(404).json({ error: "Record not found." });
-
-//         res.status(200).json({ result: deletedRecord });
-//     } catch (error) {
-//         res.status(500).json({ error: "An error occurred while deleting the record." });
-//     }
-// };
-
-// export { getRecords, getRecord, findRecordsBySurname, addRecord, addAppointmentToRecord, deleteMedicalRecord };
 export { addRecord, createRecord, getRecords, getRecord, addAppointmentToRecord, addAppointment };
