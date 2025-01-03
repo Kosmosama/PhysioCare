@@ -4,9 +4,18 @@
     <h1>Physios List</h1>
 
     <!-- Search Form -->
+    {# #TODO Make this a reusable component and add it to menu.njk #}
     <form method="GET" action="/physios">
-        <label for="searchName">Search by Name:</label>
-        <input type="text" id="searchName" name="name" value="{{ filter.name or '' }}" placeholder="Enter name">
+        <label for="specialty">Specialty:</label>
+        {# #TODO Create const in utils for all specialties #}
+        <select id="specialty" name="specialty" required>
+            <option value="" {% if not physio.specialty %}selected{% endif %}>Select Specialty</option>
+            <option value="Sports" {% if physio.specialty == "Sports" %}selected{% endif %}>Sports</option>
+            <option value="Neurological" {% if physio.specialty == "Neurological" %}selected{% endif %}>Neurological</option>
+            <option value="Pediatric" {% if physio.specialty == "Pediatric" %}selected{% endif %}>Pediatric</option>
+            <option value="Geriatric" {% if physio.specialty == "Geriatric" %}selected{% endif %}>Geriatric</option>
+            <option value="Oncological" {% if physio.specialty == "Oncological" %}selected{% endif %}>Oncological</option>
+        </select>
 
         <button type="submit" class="button">Search</button>
     </form>
@@ -43,7 +52,7 @@
                     <td>{{ physio.licenseNumber }}</td>
                     <td>
                         <!-- Edit button -->
-                        <a href="/physios/edit/{{ physio._id }}" class="button">Edit</a>
+                        <a href="/physios/{{ physio._id }}/edit" class="button">Edit</a>
                         
                         <!-- Delete button -->
                         <form method="POST" action="/physios/{{ physio._id }}" style="display: inline;">

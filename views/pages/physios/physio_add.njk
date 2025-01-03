@@ -3,7 +3,7 @@
 {% block content %}
 <h1>Add Physio</h1>
 
-<form method="POST" action="/physios/{{ physio._id }}" enctype="multipart/form-data">
+<form method="POST" action="/physios/" enctype="multipart/form-data">
     <div class="form-group">
         <label for="login">Login:</label>
         {% if errors.login %}

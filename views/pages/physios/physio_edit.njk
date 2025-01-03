@@ -4,6 +4,7 @@
 <h1>Edit Physio</h1>
 
 <form method="POST" action="/physios/{{ physio._id }}" enctype="multipart/form-data">
+    <input type="hidden" name="_method" value="PUT">
     <div class="form-group">
         <label for="name">Name:</label>
         {% if errors.name %}
@@ -25,6 +26,7 @@
         {% if errors.specialty %}
             <p class="text-danger">{{ errors.specialty }}</p>
         {% endif %}
+        {# #TODO Create const in utils for all specialties #}
         <select id="specialty" name="specialty" required>
             <option value="Sports" {% if physio.specialty == "Sports" %}selected{% endif %}>Sports</option>
             <option value="Neurological" {% if physio.specialty == "Neurological" %}selected{% endif %}>Neurological</option>

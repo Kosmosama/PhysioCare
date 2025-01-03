@@ -26,6 +26,16 @@
         <th>License Number</th>
         <td>{{ physio.licenseNumber }}</td>
     </tr>
+    <tr>
+        <th>Actions</th>
+        <td>
+            <a href="/physios/{{ physio._id }}/edit" class="button">Edit</a>
+            <form method="POST" action="/physios/{{ physio._id }}" style="display: inline;">
+                <input type="hidden" name="_method" value="delete" />
+                <button type="submit" class="button danger">Delete</button>
+            </form>
+            <a href="/records/add?physioId={{ physio._id }}" class="button">Create Record</a>
+        </td>
 </table>
 
 <a href="/physios">Back to physio List</a>

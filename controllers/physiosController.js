@@ -4,21 +4,18 @@ import { ROLES } from "../utils/constants.js";
 
 // Returns the list of all physios registered in the clinic
 const getPhysios = async (req, res) => {
-    const { name } = req.query;
+    const { specialty } = req.query;
 
     try {
         let query = {};
-
-        if (name) {
-            query.name = new RegExp(name, 'i');
-        }
+        if (specialty) query.specialty = specialty;
 
         const physios = await Physio.find(query);
 
         res.render('pages/physios/physios_list', {
             title: "Physios List",
             physios,
-            filter: { name }
+            filter: { specialty }
         });
     } catch (error) {
         res.status(500).render('pages/error', {
@@ -56,25 +53,6 @@ const getPhysio = async (req, res) => {
         });
     }
 }
-
-// Retrieve physios by specialty
-// const findPhysiosBySpecialty = async (req, res) => {
-//     const { specialty } = req.query;
-
-//     try {
-//         const query = {};
-
-//         if (specialty) query.specialty = specialty;
-
-//         const physios = await Physio.find(query);
-
-//         if (physios.length === 0) return res.status(404).json({ error: "No patients found with that specialty." });
-
-//         res.status(200).json({ result: physios });
-//     } catch (error) {
-//         res.status(500).json({ error: "An error occurred while fetching patients." });
-//     }
-// }
 
 // Show add physio form
 const showPhysioAddForm = (req, res) => {
