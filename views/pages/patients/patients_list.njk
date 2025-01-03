@@ -7,6 +7,9 @@
     <form method="GET" action="/patients">
         <label for="searchName">Search by Name:</label>
         <input type="text" id="searchName" name="name" value="{{ filter.name or '' }}" placeholder="Enter name">
+        
+        <label for="searchSurname">Search by Surname:</label>
+        <input type="text" id="searchSurname" name="surname" value="{{ filter.surname or '' }}" placeholder="Enter surname">
 
         <button type="submit" class="button">Search</button>
     </form>
@@ -45,7 +48,7 @@
                     <td>{{ patient.insuranceNumber }}</td>
                     <td>
                         <!-- Edit button -->
-                        <a href="/patients/edit/{{ patient._id }}" class="button">Edit</a>
+                        <a href="/patients/{{ patient._id }}/edit" class="button">Edit</a>
                         
                         <!-- Delete button -->
                         <form method="POST" action="/patients/{{ patient._id }}" style="display: inline;">

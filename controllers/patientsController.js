@@ -1,24 +1,34 @@
 import Patient from "../models/patient.js";
-// import { ROLES } from "../utils/constants.js";
-// import { createUser } from "./userController.js";
+import User from "../models/user.js";
+import { ROLES } from "../utils/constants.js";
 
 // Returns the list of all patients registered in the clinic
 const getPatients = async (req, res) => {
-    const { name } = req.query;
+    const { name, surname } = req.query;
 
     try {
-        let query = {};
-
-        if (name) {
-            query.name = new RegExp(name, 'i');
+        const query = {};
+        if (name || surname) {
+            const conditions = [];
+            if (name) conditions.push({ name: { $regex: name.trim(), $options: "i" } });
+            if (surname) conditions.push({ surname: { $regex: surname.trim(), $options: "i" } });
+            if (conditions.length > 0) query.$and = conditions;
         }
 
         const patients = await Patient.find(query);
 
+        if (patients.length === 0) {
+            return res.status(404).render('pages/error', {
+                title: "Patients Not Found",
+                error: "No patients found with those criteria.",
+                code: 404
+            });
+        }
+
         res.render('pages/patients/patients_list', {
             title: "Patients List",
             patients,
-            filter: { name }
+            filter: { name, surname }
         });
     } catch (error) {
         res.status(500).render('pages/error', {
@@ -57,55 +67,85 @@ const getPatient = async (req, res) => {
     }
 };
 
-// Retrieve patient by name or surname.
-// const findPatientsByNameOrSurname = async (req, res) => {
-//     const { name, surname } = req.query;
-
-//     try {
-//         const query = {};
-//         if (name || surname) {
-//             query.$and = []; 
-//             if (name) query.$and.push({ name: { $regex: name, $options: "i" } });
-//             if (surname) query.$and.push({ surname: { $regex: surname, $options: "i" } });
-//         }
-
-//         const patients = await Patient.find(query);
-
-//         if (patients.length === 0) return res.status(404).json({ error: "No patients found with those criteria." });
-
-//         res.status(200).json({ result: patients });
-//     } catch (error) {
-//         res.status(500).json({ error: "An error occurred while fetching patients." });
-//     }
-// };
-
 // Insert a new patient
-// const addPatient = async (req, res) => {
-//     const { name, surname, birthDate, address, insuranceNumber, login, password } = req.body;
+const addPatient = async (req, res) => {
+    const { name, surname, birthDate, address, insuranceNumber, login, password } = req.body;
 
-//     try {
-//         // const user = createUser({ login: login, password: password, role: ROLES.PATIENT });
+    try {
+        let image = null;
+        if (req.file) {
+            image = `/public/uploads/${req.file.filename}`;
+        }
         
-//         const newPatient = new Patient({
-//             // _id: user._id,
-//             name,
-//             surname,
-//             birthDate,
-//             address,
-//             insuranceNumber
-//         });
+        const newUser = new User({
+            login: login,
+            password: password,
+            rol: ROLES.PATIENT
+        });
         
-//         const savedPatient = await newPatient.save();
-//         res.status(201).json({ result: savedPatient });
-//     } catch (error) {
-//         if (error.name === 'ValidationError') return res.status(400).json({ error: "Validation failed: " + error.message });
+        await newUser.save();
         
-//         // 11000 -> Trying to duplicate value on unique field
-//         if (error.code === 11000) return res.status(400).json({ error: "Insurance number must be unique." });
+        const newPatient = new Patient({
+            _id: newUser._id,
+            name,
+            surname,
+            birthDate,
+            address,
+            insuranceNumber,
+            image
+        });
         
-//         res.status(400).json({ error: "An error occurred while adding the patient: " + error.message });
-//     }
-// };
+        const savedPatient = await newPatient.save();
+
+        res.status(201).render('pages/patients/patient_detail', {
+            title: `Patient Added - ${savedPatient.name} ${savedPatient.surname}`,
+            patient: savedPatient,
+            message: "Patient successfully added!"
+        });
+    } catch (error) {
+        const errors = { general: "An error occurred while creating the patient." };
+
+        if (error.name === 'ValidationError' || error.code === 11000) {
+            if (error.errors) {
+                if (error.errors.name) errors.name = error.errors.name.message;
+                if (error.errors.surname) errors.surname = error.errors.surname.message;
+                if (error.errors.birthDate) errors.birthDate = error.errors.birthDate.message;
+                if (error.errors.insuranceNumber) errors.insuranceNumber = error.errors.insuranceNumber.message;
+                if (error.errors.address) errors.address = error.errors.address.message;
+                if (error.errors.login) errors.login = error.errors.login.message;
+                if (error.errors.password) errors.password = error.errors.password.message;
+            }
+
+            if (error.code === 11000) {
+                if (error.message.includes('insuranceNumber')) {
+                    errors.insuranceNumber = "Insurance number must be unique.";
+                }
+                if (error.message.includes('login')) {
+                    errors.login = "Login must be unique.";
+                }
+            }
+
+            return res.render('pages/patients/add_patient', {
+                title: "Add Patient - Validation Error",
+                patient: { name, surname, birthDate, address, insuranceNumber, login },
+                errors
+            });
+        }
+
+        res.status(500).render('pages/error', {
+            title: "Internal Server Error",
+            error: "An error occurred while adding the patient.",
+            code: 500
+        });
+    }
+};
+
+// Show add patient form
+const showAddPatient = (req, res) => {
+    res.render('pages/patients/patient_add', {
+        title: "Add Patient"
+    });
+};
 
 // Update patient data by ID
 const updatePatient = async (req, res) => {
@@ -226,4 +266,4 @@ const editPatient = async (req, res) => {
     }
 };
 
-export { getPatients, getPatient, updatePatient, deletePatient, editPatient }; // , findPatientsByNameOrSurname, addPatient
+export { getPatients, getPatient, updatePatient, deletePatient, editPatient, showAddPatient, addPatient };

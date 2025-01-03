@@ -1,10 +1,24 @@
 {% extends "../../layouts/base.njk" %}
 
 {% block content %}
-<h1>Edit Patient</h1>
+<h1>Add Patient</h1>
 
-<form method="POST" action="/patients/{{ patient._id }}" enctype="multipart/form-data">
-    <input type="hidden" name="_method" value="put" />
+<form method="POST" action="/patients/" enctype="multipart/form-data">
+    <div class="form-group">
+        <label for="login">Login:</label>
+        {% if errors.login %}
+            <p class="text-danger">{{ errors.login }}</p>
+        {% endif %}
+        <input type="text" id="login" name="login" value="{{ patient.login }}" required>
+    </div>
+
+    <div class="form-group">
+        <label for="password">Password:</label>
+        {% if errors.password %}
+            <p class="text-danger">{{ errors.password }}</p>
+        {% endif %}
+        <input type="password" id="password" name="password" required>
+    </div>
 
     <div class="form-group">
         <label for="name">Name:</label>

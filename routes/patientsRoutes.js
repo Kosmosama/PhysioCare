@@ -4,23 +4,23 @@ import express from "express";
 import { 
     getPatients, 
     getPatient, 
-    // findPatientsByNameOrSurname, 
-    // addPatient,
+    addPatient,
     updatePatient,
     deletePatient,
-    editPatient
+    editPatient,
+    showAddPatient
 } from "../controllers/patientsController.js";
 
 const router = express.Router();
 
-router.get('/edit/:id', editPatient); // Show patient edit form
+
+router.get('/add', showAddPatient); // Show patient add form
+router.get('/:id/edit/', editPatient); // Show patient edit form
 router.get("/:id", getPatient); // Show patient details
 router.get("/", getPatients); // Show all patients
 
 router.delete("/:id", deletePatient); // Recieves form POST delete «to delete»
-router.post("/:id", uploads.upload.single('image'), updatePatient); // Recieves form POST «to edit»
-
-// router.get("/find", findPatientsByNameOrSurname);
-// router.post("/", addPatient);
+router.put("/:id", uploads.upload.single('image'), updatePatient); // Recieves form POST «to edit»
+router.post("/", uploads.upload.single('image'), addPatient); // Recieves form POST «to add»
 
 export default router;
