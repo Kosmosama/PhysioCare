@@ -1,4 +1,6 @@
 import express from "express";
+import { ROLES } from "../utils/constants.js";
+import { allowedRoles } from "../middlewares/auth.js";
 import {
     getRecords,
     getRecord,
@@ -7,8 +9,6 @@ import {
     addAppointment,
     createRecord
 } from "../controllers/recordsController.js";
-import { ROLES } from "../utils/constants.js";
-import { allowedRoles } from "../middlewares/auth.js";
 
 const router = express.Router();
 

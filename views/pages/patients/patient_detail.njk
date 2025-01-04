@@ -32,6 +32,7 @@
     </tr>
     <tr>
         <th>Actions</th>
+        {# #TODO Only show this to admins and physios. Add button to show record. #}
         <td>
             <a href="/patients/{{ patient._id }}/edit" class="button">Edit</a>
             <form method="POST" action="/patients/{{ patient._id }}" style="display: inline;">
