@@ -6,12 +6,13 @@ import { format } from 'date-fns';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import methodOverride from 'method-override';
+import session from "express-session";
 
 import { checkEnvFile } from "./utils/utils.js";
-// import userRoutes from "./routes/userRoutes.js";
 import patientsRoutes from "./routes/patientsRoutes.js";
 import physiosRoutes from "./routes/physiosRoutes.js";
 import recordsRoutes from "./routes/recordsRoutes.js";
+import authRoutes from "./routes/authRoutes.js";
 
 dotenv.config();
 checkEnvFile();
@@ -26,6 +27,12 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
+
+app.use(session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: true
+}));
 
 const env = nunjucks.configure('views', {
     autoescape: true,
@@ -56,7 +63,7 @@ app.get('/', (req, res) => {
     res.sendFile(__dirname + '/public/index.html');
 });
 
-// app.use("/auth", userRoutes);
+app.use("/auth", authRoutes);
 app.use("/patients", patientsRoutes);
 app.use("/physios", physiosRoutes);
 app.use("/records", recordsRoutes);

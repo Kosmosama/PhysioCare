@@ -1,6 +1,6 @@
 import express from "express";
-// import { ROLES } from "../utils/constants.js";
-// import { protectRoute } from "../auth/auth.js";
+import { ROLES } from "../utils/constants.js";
+import { allowedRoles } from "../middlewares/auth.js";
 import {
     getRecords,
     getRecord,
@@ -12,13 +12,12 @@ import {
 
 const router = express.Router();
 
-router.get("/new", createRecord); // Show record creation form
-router.get("/:id/appointments/new", addAppointment); // Show appointment creation form
-router.post("/:id/appointments", addAppointmentToRecord); // Add appointment to record
+router.get("/new", createRecord);
+router.get("/:id/appointments/new", addAppointment);
+router.get("/:id", getRecord);
+router.get("/", getRecords);
 
-router.get("/:id", getRecord); // Show record details
-router.get("/", getRecords); // Show all records
-
-router.post("/", addRecord); // Form add record
+router.post("/:id/appointments", addAppointmentToRecord);
+router.post("/", addRecord);
 
 export default router;
