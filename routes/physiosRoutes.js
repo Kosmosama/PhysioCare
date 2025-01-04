@@ -1,7 +1,5 @@
 import express from "express";
 import uploads from "../middlewares/uploads.js";
-import { ROLES } from "../utils/constants.js";
-import { allowedRoles } from "../middlewares/auth.js";
 import { 
     getPhysios,
     getPhysio,
@@ -25,3 +23,6 @@ router.post("/", uploads.upload.single('image'), addPhysio);
 
 
 export default router;
+
+// #ASK Only admins can access here?
+// #ASK Can physios see themselves?

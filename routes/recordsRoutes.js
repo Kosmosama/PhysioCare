@@ -1,6 +1,4 @@
 import express from "express";
-import { ROLES } from "../utils/constants.js";
-import { allowedRoles } from "../middlewares/auth.js";
 import {
     getRecords,
     getRecord,
@@ -9,15 +7,17 @@ import {
     addAppointment,
     createRecord
 } from "../controllers/recordsController.js";
+import { ROLES } from "../utils/constants.js";
+import { allowedRoles } from "../middlewares/auth.js";
 
 const router = express.Router();
 
-router.get("/new", createRecord);
-router.get("/:id/appointments/new", addAppointment);
-router.get("/:id", getRecord);
-router.get("/", getRecords);
+router.get("/new", allowedRoles(ROLES.ADMIN, ROLES.PHYSIO), createRecord);
+router.get("/:id/appointments/new", allowedRoles(ROLES.ADMIN, ROLES.PHYSIO), addAppointment);
+router.get("/:id", allowedRoles(ROLES.ADMIN, ROLES.PHYSIO, ROLES.PATIENT), getRecord); // #TODO Only self patient
+router.get("/", allowedRoles(ROLES.ADMIN, ROLES.PHYSIO), getRecords);
 
-router.post("/:id/appointments", addAppointmentToRecord);
-router.post("/", addRecord);
+router.post("/:id/appointments", allowedRoles(ROLES.ADMIN, ROLES.PHYSIO), addAppointmentToRecord);
+router.post("/", allowedRoles(ROLES.ADMIN, ROLES.PHYSIO), addRecord);
 
 export default router;

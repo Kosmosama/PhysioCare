@@ -1,18 +1,24 @@
-import express from "express";
-import mongoose from "mongoose";
+// External dependencies
 import dotenv from "dotenv";
+import express from "express";
+import methodOverride from 'method-override';
+import mongoose from "mongoose";
 import nunjucks from "nunjucks";
-import { format } from 'date-fns';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import methodOverride from 'method-override';
+import { format } from 'date-fns';
 import session from "express-session";
 
-import { checkEnvFile } from "./utils/utils.js";
+// Internal routes
+import authRoutes from "./routes/authRoutes.js";
 import patientsRoutes from "./routes/patientsRoutes.js";
 import physiosRoutes from "./routes/physiosRoutes.js";
 import recordsRoutes from "./routes/recordsRoutes.js";
-import authRoutes from "./routes/authRoutes.js";
+
+// Internal utilities and middlewares
+import { checkEnvFile } from "./utils/utils.js";
+import { allowedRoles } from "./middlewares/auth.js";
+import { ROLES } from "./utils/constants.js";
 
 dotenv.config();
 checkEnvFile();
@@ -65,7 +71,7 @@ app.get('/', (req, res) => {
 
 app.use("/auth", authRoutes);
 app.use("/patients", patientsRoutes);
-app.use("/physios", physiosRoutes);
+app.use("/physios", allowedRoles(ROLES.ADMIN), physiosRoutes);
 app.use("/records", recordsRoutes);
 
 app.listen(PORT, () => {
