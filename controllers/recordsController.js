@@ -29,7 +29,7 @@ const getRecords = async (req, res) => {
 
         res.render('pages/records/records_list', {
             title: "Records List",
-            filteredRecords,
+            records: filteredRecords,
             filter: { surname }
         });
     } catch (error) {
