@@ -1,5 +1,5 @@
 const checkEnvFile = () => {
-    const requiredVars = ["DB_URL", "PORT", "SECRET"];
+    const requiredVars = ["DB_URL", "PORT", "SESSION_SECRET"];
     const missingVars = requiredVars.filter((key) => !process.env[key]);
 
     if (missingVars.length > 0) {

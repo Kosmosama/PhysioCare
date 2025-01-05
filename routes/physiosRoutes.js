@@ -1,5 +1,5 @@
 import express from "express";
-import uploads from "../middlewares/uploads.js";
+import upload from "../middlewares/uploads.js";
 import { 
     getPhysios,
     getPhysio,
@@ -18,8 +18,8 @@ router.get('/:id/edit', editPhysio);
 router.get("/", getPhysios);
 
 router.delete("/:id",  deletePhysio);
-router.put("/:id", uploads.upload.single('image'), updatePhysio);
-router.post("/", uploads.upload.single('image'), addPhysio);
+router.put("/:id", upload.single('image'), updatePhysio);
+router.post("/", upload.single('image'), addPhysio);
 
 
 export default router;

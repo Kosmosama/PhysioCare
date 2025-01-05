@@ -1,5 +1,5 @@
 import express from "express";
-import uploads from "../middlewares/uploads.js";
+import upload from "../middlewares/uploads.js";
 import { ROLES } from "../utils/constants.js";
 import { allowedRoles } from "../middlewares/auth.js";
 import { 
@@ -20,8 +20,8 @@ router.get("/:id", allowedRoles(ROLES.ADMIN, ROLES.PHYSIO, ROLES.PATIENT), getPa
 router.get("/", allowedRoles(ROLES.ADMIN, ROLES.PHYSIO), getPatients);
 
 router.delete("/:id", allowedRoles(ROLES.ADMIN, ROLES.PHYSIO), deletePatient);
-router.put("/:id", allowedRoles(ROLES.ADMIN, ROLES.PHYSIO, ROLES.PATIENT), uploads.upload.single('image'), updatePatient); // #TODO Only self patient
-router.post("/", allowedRoles(ROLES.ADMIN, ROLES.PHYSIO), uploads.upload.single('image'), addPatient);
+router.put("/:id", allowedRoles(ROLES.ADMIN, ROLES.PHYSIO, ROLES.PATIENT), upload.single('image'), updatePatient); // #TODO Only self patient
+router.post("/", allowedRoles(ROLES.ADMIN, ROLES.PHYSIO), upload.single('image'), addPatient);
 
 export default router;
 

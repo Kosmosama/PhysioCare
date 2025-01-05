@@ -64,7 +64,7 @@ const getPhysio = async (req, res) => {
 
 // Show add physio form
 const showPhysioAddForm = (req, res) => {
-    res.render('pages/physios/add_physio', {
+    res.render('pages/physios/physio_add', {
         title: "Add Physio"
     });
 };
@@ -93,7 +93,7 @@ const addPhysio = async (req, res) => {
             surname,
             specialty,
             licenseNumber,
-            image
+            image // #TODO If this fails, delete image (also delete user)
         });
         
         const savedPhysio = await newPhysio.save();
@@ -125,7 +125,7 @@ const addPhysio = async (req, res) => {
                 }
             }
 
-            return res.render('pages/physios/add_physio', {
+            return res.render('pages/physios/physio_add', {
                 title: "Add Physio - Validation Error",
                 physio: { name, surname, birthDate, address, insuranceNumber, login },
                 errors
@@ -146,6 +146,7 @@ const updatePhysio = async (req, res) => {
     const { name, surname, specialty, licenseNumber } = req.body;
 
     try {
+        console.log("im here");
         const updateData = { name, surname, specialty, licenseNumber };
 
         if (req.file) {
@@ -230,7 +231,7 @@ const editPhysio = async (req, res) => {
 // Delete physio by ID
 const deletePhysio = async (req, res) => {
     const { id } = req.params;
-
+    // #TODO Delete user as well
     try {
         const deletedPhysio = await Physio.findByIdAndDelete(id);
 

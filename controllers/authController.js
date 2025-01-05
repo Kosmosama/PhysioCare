@@ -2,7 +2,7 @@ import User from '../models/user.js';
 
 // Show login form
 const showLogin = async (req, res) => {
-    res.render('pages/auth/login', {
+    return res.render('pages/login', {
         title: "Login"
     });
 };
@@ -16,7 +16,7 @@ const login = async (req, res) => {
     if (!password) errors.password = "Password is required.";
 
     if (Object.keys(errors).length > 0) {
-        return res.render('pages/auth/login', {
+        return res.render('pages/login', {
             title: "Login - Error",
             errors,
             patient: { login }
@@ -27,7 +27,7 @@ const login = async (req, res) => {
         const user = await User.findOne({ login });
 
         if (!user) {
-            return res.render('pages/auth/login', {
+            return res.render('pages/login', {
                 title: "Login - Error",
                 errors: { login: "Invalid login or password." },
                 patient: { login }
@@ -35,7 +35,7 @@ const login = async (req, res) => {
         }
 
         if (user.password !== password) {
-            return res.render('pages/auth/login', {
+            return res.render('pages/login', {
                 title: "Login - Error",
                 errors: { password: "Invalid login or password." },
                 patient: { login }

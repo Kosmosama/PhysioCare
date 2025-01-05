@@ -92,7 +92,7 @@ const addPatient = async (req, res) => {
             birthDate,
             address,
             insuranceNumber,
-            image
+            image // #TODO If this fails, delete image (also delete user)
         });
         
         const savedPatient = await newPatient.save();
@@ -125,7 +125,7 @@ const addPatient = async (req, res) => {
                 }
             }
 
-            return res.render('pages/patients/add_patient', {
+            return res.render('pages/patients/patient_add', {
                 title: "Add Patient - Validation Error",
                 patient: { name, surname, birthDate, address, insuranceNumber, login },
                 errors
@@ -210,7 +210,7 @@ const updatePatient = async (req, res) => {
 // Delete patient by ID
 const deletePatient = async (req, res) => {
     const { id } = req.params;
-
+    // #TODO Delete user as well
     try {
         const deletedPatient = await Patient.findByIdAndDelete(id);
 
