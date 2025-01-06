@@ -231,7 +231,7 @@ const editPhysio = async (req, res) => {
 // Delete physio by ID
 const deletePhysio = async (req, res) => {
     const { id } = req.params;
-    // #TODO Delete user as well
+    // #TODO Delete image from uploads
     try {
         const deletedPhysio = await Physio.findByIdAndDelete(id);
 
@@ -248,6 +248,8 @@ const deletePhysio = async (req, res) => {
         //     title: "Physio Deleted",
         //     message: `Physio with ID ${id} has been successfully deleted.`
         // });
+
+        await User.findByIdAndDelete(id);
 
         res.redirect(req.baseUrl);
     } catch (error) {

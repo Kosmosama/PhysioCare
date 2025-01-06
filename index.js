@@ -79,3 +79,24 @@ app.listen(PORT, () => {
 });
 
 // #TODO Error should be a util
+
+// #ASK Install connect-flash to:
+// app.use(flash());
+
+// app.use((req, res, next) => {
+//     res.locals.success = req.flash('success');
+//     res.locals.error = req.flash('error');
+//     next();
+// });
+
+// Ex:
+// req.flash('success', `Patient with ID ${id} has been successfully deleted.`);
+// res.redirect(req.baseUrl);
+
+// Ex:
+// <% if (success) { %>
+//     <div class="alert alert-success"><%= success %></div>
+// <% } %>
+// <% if (error) { %>
+//     <div class="alert alert-danger"><%= error %></div>
+// <% } %>

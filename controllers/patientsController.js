@@ -210,7 +210,7 @@ const updatePatient = async (req, res) => {
 // Delete patient by ID
 const deletePatient = async (req, res) => {
     const { id } = req.params;
-    // #TODO Delete user as well
+    // #TODO Delete image from uploads
     try {
         const deletedPatient = await Patient.findByIdAndDelete(id);
 
@@ -227,6 +227,8 @@ const deletePatient = async (req, res) => {
         //     title: "Patient Deleted",
         //     message: `Patient with ID ${id} has been successfully deleted.`
         // });
+
+        await User.findByIdAndDelete(id);
 
         res.redirect(req.baseUrl);
     } catch (error) {
