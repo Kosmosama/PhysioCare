@@ -45,10 +45,30 @@ const getRecords = async (req, res) => {
 const getRecord = async (req, res) => {
     const { id } = req.params;
 
+    // #ASK Should this id be from the record or the patient?
+
+    // If it is from the patient (more changes in views & other functions needed)
+    // if (req.user.rol === ROLES.PATIENT && req.user._id !== id) {
+    //     return res.status(403).render('pages/error', {
+    //         title: "Forbidden",
+    //         error: "Forbidden: Insufficient role privileges.",
+    //         code: 403
+    //     });
+    // }
+
     try {
         const record = await Record.findById(id)
-            .populate('patient', 'name surname')
-            .populate('appointments.physio', 'name');
+        .populate('patient', 'name surname')
+        .populate('appointments.physio', 'name');
+        
+        // If it is from the record
+        if (record && req.user.rol === ROLES.PATIENT && record.patient._id.toString() !== req.user._id) {
+            return res.status(403).render('pages/error', {
+                title: "Forbidden",
+                error: "Forbidden: You do not have permission to access this record.",
+                code: 403
+            });
+        }
 
         if (!record) {
             return res.status(404).render('pages/error', {
