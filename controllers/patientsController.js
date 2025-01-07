@@ -244,7 +244,7 @@ const deletePatient = async (req, res) => {
         await Patient.findByIdAndDelete(id);
         await User.findByIdAndDelete(id);
 
-        // #MAYBE to show a confirmation that the patient has been deleted
+        // #MAYBE show a confirmation that the patient has been deleted
         // res.status(200).render('pages/success', {
         //     title: "Patient Deleted",
         //     message: `Patient with ID ${id} has been successfully deleted.`

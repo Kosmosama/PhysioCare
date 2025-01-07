@@ -54,4 +54,10 @@ const login = async (req, res) => {
     }
 };
 
-export { showLogin, login };
+// Logout
+const logout = async (req, res) => {
+    req.session.destroy();
+    return res.redirect('/');
+};
+
+export { showLogin, login, logout };

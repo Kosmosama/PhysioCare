@@ -1,34 +1,38 @@
 <nav class="navbar navbar-expand-lg bg-light">
-  <div class="container">
-    <a class="navbar-brand d-flex align-items-center" href="/">
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-2">
-        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
-      </svg>
-      <span>MyPage</span>
-    </a>
+	<div class="container">
+		<a class="navbar-brand d-flex align-items-center" href="/">
+		<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-2">
+			<polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+		</svg>
+		<span>MyPage</span>
+		</a>
 
-    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-      <li class="nav-item">
-        <a class="nav-link active" href="/patients">Patients</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="/patients/add">Add Patient</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="/physios">Physios</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="/physios/add">Add Physio</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="/records">Records</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="/records/new">Add Record</a>
-      </li>
-    </ul>
+		<ul class="navbar-nav me-auto mb-2 mb-lg-0">
+		<li class="nav-item">
+			<a class="nav-link active" href="/patients">Patients</a>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link" href="/patients/add">Add Patient</a>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link" href="/physios">Physios</a>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link" href="/physios/add">Add Physio</a>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link" href="/records">Records</a>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link" href="/records/new">Add Record</a>
+		</li>
+		</ul>
 
-    {# #TODO Should turn to logout button if user is logged in #}
-    <a class="btn btn-primary login-btn" href="/auth/login">Login</a>
-  </div>
+		{% if (session and session.usuario) %}
+			<a class="btn btn-secondary logout-btn" href="/auth/logout">Logout</a>
+		{% else %}
+			<a class="btn btn-primary login-btn" href="/auth/login">Login</a>
+		{% endif %}
+
+	</div>
 </nav>

@@ -259,7 +259,7 @@ const deletePhysio = async (req, res) => {
         await Physio.findByIdAndDelete(id);
         await User.findByIdAndDelete(id);
 
-        // #MAYBE to show a confirmation that the physio has been deleted
+        // #MAYBE show a confirmation that the physio has been deleted
         // res.status(200).render('pages/success', {
         //     title: "Physio Deleted",
         //     message: `Physio with ID ${id} has been successfully deleted.`

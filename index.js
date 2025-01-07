@@ -69,6 +69,11 @@ app.get('/', (req, res) => {
     res.sendFile(__dirname + '/public/index.html');
 });
 
+app.use((req, res, next) => {
+    res.locals.session = req.session;
+    next();
+});
+
 app.use("/auth", authRoutes);
 app.use("/patients", patientsRoutes);
 app.use("/physios", allowedRoles(ROLES.ADMIN), physiosRoutes);

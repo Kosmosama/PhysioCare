@@ -85,17 +85,6 @@ const addRecord = async (req, res) => {
             });
         }
 
-        // #TODO Button won't show if record already exists // Could also be checked with the error 11000
-        const existingRecord = await Record.findOne({ patient: patientId });
-        if (existingRecord) {
-            return res.status(400).render('pages/records/record_add', {
-                title: "Record Already Exists",
-                error: `A record already exists for the patient with ID: ${patientId}`,
-                patientId,
-                medicalRecord
-            });
-        }
-
         const newRecord = new Record({
             patient: patient._id,
             medicalRecord,
