@@ -18,7 +18,7 @@ import recordsRoutes from "./routes/recordsRoutes.js";
 // Internal utilities and middlewares
 import { checkEnvFile } from "./utils/utils.js";
 import { allowedRoles } from "./middlewares/auth.js";
-import { ROLES } from "./utils/constants.js";
+import { ROLES, SESSION_TIME } from "./utils/constants.js";
 
 dotenv.config();
 checkEnvFile();
@@ -37,7 +37,8 @@ const app = express();
 app.use(session({
     secret: process.env.SESSION_SECRET,
     resave: false,
-    saveUninitialized: true
+    saveUninitialized: false,
+    expires: new Date(Date.now() + (SESSION_TIME * 60 * 1000))
 }));
 
 const env = nunjucks.configure('views', {

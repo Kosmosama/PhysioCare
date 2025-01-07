@@ -4,4 +4,6 @@ const ROLES = {
     PATIENT: "patient"
 };
 
-export { ROLES };
+const SESSION_TIME = 60; // In minutes
+
+export { ROLES, SESSION_TIME };
