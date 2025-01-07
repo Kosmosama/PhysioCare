@@ -4,7 +4,6 @@ const appointmentSchema = new mongoose.Schema({
     date: { 
         type: Date, 
         required: [true, "The appointment date is required"]
-        // #MAYBE Check the date is in the future
     },
     physio: { 
         type: mongoose.Schema.Types.ObjectId, 

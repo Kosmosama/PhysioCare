@@ -20,11 +20,7 @@ router.get("/:id", allowedRoles(ROLES.ADMIN, ROLES.PHYSIO, ROLES.PATIENT), getPa
 router.get("/", allowedRoles(ROLES.ADMIN, ROLES.PHYSIO), getPatients);
 
 router.delete("/:id", allowedRoles(ROLES.ADMIN, ROLES.PHYSIO), deletePatient);
-router.put("/:id", allowedRoles(ROLES.ADMIN, ROLES.PHYSIO, ROLES.PATIENT), upload.single('image'), updatePatient);
+router.post("/:id", allowedRoles(ROLES.ADMIN, ROLES.PHYSIO, ROLES.PATIENT), upload.single('image'), updatePatient);
 router.post("/", allowedRoles(ROLES.ADMIN, ROLES.PHYSIO), upload.single('image'), addPatient);
 
 export default router;
-
-// #ASK Can patients edit themselves?
-// #ASK Can patients delete themselves?
-// #ASK Can patients add themselves?

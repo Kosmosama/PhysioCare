@@ -70,6 +70,8 @@ app.get('/', (req, res) => {
     res.sendFile(__dirname + '/public/index.html');
 });
 
+
+
 app.use((req, res, next) => {
     res.locals.session = req.session;
     next();
@@ -84,9 +86,14 @@ app.listen(PORT, () => {
     console.log(`Server is running on \x1b[34mhttp://localhost:${PORT}...\x1b[0m`);
 });
 
+// #ASK Can I skip creating a /find as i already do it in the get{Patients/Physios} functions?
+
+// #TODO Permissions (if something cannot be seen, add button to show it; ex: profile in menu for physio)
+// https://imgur.com/lLLajlq
+
 // #TODO Error should be a util
 
-// #ASK Install connect-flash to:
+// #TODO Install connect-flash to:
 // app.use(flash());
 
 // app.use((req, res, next) => {
