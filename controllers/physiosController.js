@@ -1,5 +1,6 @@
 import Physio from "../models/physio.js";
 import User from "../models/user.js";
+import { deleteImage } from "../middlewares/uploads.js";
 import { ROLES } from "../utils/constants.js";
 
 // Returns the list of all physios registered in the clinic
@@ -78,8 +79,19 @@ const addPhysio = async (req, res) => {
         if (req.file) {
             image = `/public/uploads/${req.file.filename}`;
         }
+
+        const newPhysio = new Physio({
+            name,
+            surname,
+            specialty,
+            licenseNumber,
+            image
+        });
         
+        const savedPhysio = await newPhysio.save();
+
         const newUser = new User({
+            _id: savedPhysio._id,
             login: login,
             password: password,
             rol: ROLES.PHYSIO
@@ -87,23 +99,16 @@ const addPhysio = async (req, res) => {
         
         await newUser.save();
         
-        const newPhysio = new Physio({
-            _id: newUser._id,
-            name,
-            surname,
-            specialty,
-            licenseNumber,
-            image // #TODO If this fails, delete image (also delete user)
-        });
-        
-        const savedPhysio = await newPhysio.save();
-
         res.status(201).render('pages/physios/physio_detail', {
             title: `Physio Added - ${savedPhysio.name} ${savedPhysio.surname}`,
             physio: savedPhysio,
             message: "Physio successfully added!"
         });
     } catch (error) {
+        if (req.file) {
+            deleteImage(req.file.filename);
+        }
+        
         const errors = { general: "An error occurred while creating the physio." };
 
         if (error.name === 'ValidationError' || error.code === 11000) {
@@ -146,20 +151,10 @@ const updatePhysio = async (req, res) => {
     const { name, surname, specialty, licenseNumber } = req.body;
 
     try {
-        console.log("im here");
-        const updateData = { name, surname, specialty, licenseNumber };
+        const updateData = {};
+        const physioToUpdate = await Physio.findById(id);
 
-        if (req.file) {
-            updateData.image = `/public/uploads/${req.file.filename}`;
-        }
-
-        const updatedPhysio = await Physio.findByIdAndUpdate(
-            id,
-            updateData,
-            { new: true, runValidators: true }
-        );
-
-        if (!updatedPhysio) {
+        if (!physioToUpdate) {
             return res.status(404).render('pages/error', {
                 title: "Physio Not Found",
                 error: `No physio found with ID: ${id}`,
@@ -167,12 +162,30 @@ const updatePhysio = async (req, res) => {
             });
         }
 
+        if (name) updateData.name = name;
+        if (surname) updateData.surname = surname;
+        if (specialty) updateData.specialty = specialty;
+        if (licenseNumber) updateData.licenseNumber = licenseNumber;
+        if (req.file) updateData.image = `/public/uploads/${req.file.filename}`;
+
+        const updatedPhysio = await Physio.findByIdAndUpdate(
+            id,
+            updateData,
+            { new: true, runValidators: true }
+        );
+
+        if (req.file && physioToUpdate.image) deleteImage(physioToUpdate.image);
+
         res.status(200).render('pages/physios/physio_detail', {
             title: `Physio Updated - ${updatedPhysio.name} ${updatedPhysio.surname}`,
             physio: updatedPhysio,
             message: "Physio successfully updated!"
         });
     } catch (error) {
+        if (req.file) {
+            deleteImage(req.file.filename);
+        }
+
         const errors = { general: "An error occurred while updating the physio." };
 
         if (error.name === 'ValidationError' || error.code === 11000) {
@@ -231,11 +244,11 @@ const editPhysio = async (req, res) => {
 // Delete physio by ID
 const deletePhysio = async (req, res) => {
     const { id } = req.params;
-    // #TODO Delete image from uploads
-    try {
-        const deletedPhysio = await Physio.findByIdAndDelete(id);
 
-        if (!deletedPhysio) {
+    try {
+        const physio = await Physio.findById(id);
+
+        if (!physio) {
             return res.status(404).render('pages/error', {
                 title: "Physio Not Found",
                 error: `No physio found with ID: ${id}`,
@@ -243,13 +256,14 @@ const deletePhysio = async (req, res) => {
             });
         }
 
+        await Physio.findByIdAndDelete(id);
+        await User.findByIdAndDelete(id);
+
         // #MAYBE to show a confirmation that the physio has been deleted
         // res.status(200).render('pages/success', {
         //     title: "Physio Deleted",
         //     message: `Physio with ID ${id} has been successfully deleted.`
         // });
-
-        await User.findByIdAndDelete(id);
 
         res.redirect(req.baseUrl);
     } catch (error) {

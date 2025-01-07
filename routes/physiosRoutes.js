@@ -1,5 +1,5 @@
 import express from "express";
-import upload from "../middlewares/uploads.js";
+import { upload } from "../middlewares/uploads.js";
 import { 
     getPhysios,
     getPhysio,

@@ -10,7 +10,7 @@
         {% if errors.name %}
             <p class="text-danger">{{ errors.name }}</p>
         {% endif %}
-        <input type="text" id="name" name="name" value="{{ physio.name }}" required>
+        <input type="text" id="name" name="name" value="{{ physio.name }}">
     </div>
 
     <div class="form-group">
@@ -18,7 +18,7 @@
         {% if errors.surname %}
             <p class="text-danger">{{ errors.surname }}</p>
         {% endif %}
-        <input type="text" id="surname" name="surname" value="{{ physio.surname }}" required>
+        <input type="text" id="surname" name="surname" value="{{ physio.surname }}">
     </div>
 
     <div class="form-group">
@@ -27,7 +27,7 @@
             <p class="text-danger">{{ errors.specialty }}</p>
         {% endif %}
         {# #TODO Create const in utils for all specialties #}
-        <select id="specialty" name="specialty" required>
+        <select id="specialty" name="specialty">
             <option value="Sports" {% if physio.specialty == "Sports" %}selected{% endif %}>Sports</option>
             <option value="Neurological" {% if physio.specialty == "Neurological" %}selected{% endif %}>Neurological</option>
             <option value="Pediatric" {% if physio.specialty == "Pediatric" %}selected{% endif %}>Pediatric</option>
@@ -41,7 +41,7 @@
         {% if errors.licenseNumber %}
             <p class="text-danger">{{ errors.licenseNumber }}</p>
         {% endif %}
-        <input type="text" id="licenseNumber" name="licenseNumber" value="{{ physio.licenseNumber }}" required>
+        <input type="text" id="licenseNumber" name="licenseNumber" value="{{ physio.licenseNumber }}">
     </div>
 
     <div class="form-group">

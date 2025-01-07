@@ -1,6 +1,6 @@
 import multer from 'multer';
-// import path from 'path';
-// import fs from 'fs';
+import path from 'path';
+import fs from 'fs';
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -16,16 +16,18 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-// const deleteImage = (relativePath) => {
-//     const fullPath = path.join(process.cwd(), relativePath);
-//     fs.unlink(fullPath, (err) => {
-//         if (err) {
-//             console.error(`Failed to delete image at ${fullPath}:`, err);
-//         } else {
-//             console.log(`Image at ${fullPath} deleted successfully.`);
-//         }
-//     });
-// };
+/**
+ * Delete an image file.
+ * @param {string} imageName - The location of the image to delete.
+ */
+const deleteImage = (imageName) => {
+    const fullPath = path.join(process.cwd(), imageName);
 
-// export { upload, deleteImage };
-export default upload;
+    fs.unlink(fullPath, (error) => {
+        if (error) {
+            console.error(`Failed to delete image at ${fullPath}:`, error);
+        }
+    });
+};
+
+export { upload, deleteImage };

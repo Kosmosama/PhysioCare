@@ -1,5 +1,6 @@
 import Patient from "../models/patient.js";
 import User from "../models/user.js";
+import { deleteImage } from "../middlewares/uploads.js";
 import { ROLES } from "../utils/constants.js";
 
 // Returns the list of all patients registered in the clinic
@@ -77,7 +78,19 @@ const addPatient = async (req, res) => {
             image = `/public/uploads/${req.file.filename}`;
         }
         
+        const newPatient = new Patient({
+            name,
+            surname,
+            birthDate,
+            address,
+            insuranceNumber,
+            image
+        });
+        
+        const savedPatient = await newPatient.save();
+        
         const newUser = new User({
+            _id: savedPatient._id,
             login: login,
             password: password,
             rol: ROLES.PATIENT
@@ -85,24 +98,16 @@ const addPatient = async (req, res) => {
         
         await newUser.save();
         
-        const newPatient = new Patient({
-            _id: newUser._id,
-            name,
-            surname,
-            birthDate,
-            address,
-            insuranceNumber,
-            image // #TODO If this fails, delete image (also delete user)
-        });
-        
-        const savedPatient = await newPatient.save();
-
         res.status(201).render('pages/patients/patient_detail', {
             title: `Patient Added - ${savedPatient.name} ${savedPatient.surname}`,
             patient: savedPatient,
             message: "Patient successfully added!"
         });
     } catch (error) {
+        if (req.file) {
+            deleteImage(req.file.filename);
+        }
+
         const errors = { general: "An error occurred while creating the patient." };
 
         if (error.name === 'ValidationError' || error.code === 11000) {
@@ -153,19 +158,10 @@ const updatePatient = async (req, res) => {
     const { name, surname, birthDate, address, insuranceNumber } = req.body;
 
     try {
-        const updateData = { name, surname, birthDate, address, insuranceNumber };
+        const updateData = {};
+        const patientToUpdate = await Patient.findById(id);
 
-        if (req.file) {
-            updateData.image = `/public/uploads/${req.file.filename}`;
-        }
-
-        const updatedPatient = await Patient.findByIdAndUpdate(
-            id,
-            updateData,
-            { new: true, runValidators: true }
-        );
-
-        if (!updatedPatient) {
+        if (!patientToUpdate) {
             return res.status(404).render('pages/error', {
                 title: "Patient Not Found",
                 error: `No patient found with ID: ${id}`,
@@ -173,12 +169,31 @@ const updatePatient = async (req, res) => {
             });
         }
 
+        if (name) updateData.name = name;
+        if (surname) updateData.surname = surname;
+        if (birthDate) updateData.birthDate = birthDate;
+        if (address) updateData.address = address;
+        if (insuranceNumber) updateData.insuranceNumber = insuranceNumber;
+        if (req.file) updateData.image = `/public/uploads/${req.file.filename}`;
+
+        const updatedPatient = await Patient.findByIdAndUpdate(
+            id,
+            updateData,
+            { new: true, runValidators: true }
+        );
+
+        if (req.file && patientToUpdate.image) deleteImage(patientToUpdate.image);
+
         res.status(200).render('pages/patients/patient_detail', {
             title: `Patient Updated - ${updatedPatient.name} ${updatedPatient.surname}`,
             patient: updatedPatient,
             message: "Patient successfully updated!"
         });
     } catch (error) {
+        if (req.file) {
+            deleteImage(req.file.filename);
+        }
+
         const errors = { general: "An error occurred while updating the patient." };
 
         if (error.name === 'ValidationError' || error.code === 11000) {
@@ -210,11 +225,11 @@ const updatePatient = async (req, res) => {
 // Delete patient by ID
 const deletePatient = async (req, res) => {
     const { id } = req.params;
-    // #TODO Delete image from uploads
-    try {
-        const deletedPatient = await Patient.findByIdAndDelete(id);
 
-        if (!deletedPatient) {
+    try {
+        const patient = await Patient.findById(id);
+
+        if (!patient) {
             return res.status(404).render('pages/error', {
                 title: "Patient Not Found",
                 error: `No patient found with ID: ${id}`,
@@ -222,13 +237,18 @@ const deletePatient = async (req, res) => {
             });
         }
 
+        if (patient.image) {
+            deleteImage(patient.image);
+        }
+
+        await Patient.findByIdAndDelete(id);
+        await User.findByIdAndDelete(id);
+
         // #MAYBE to show a confirmation that the patient has been deleted
         // res.status(200).render('pages/success', {
         //     title: "Patient Deleted",
         //     message: `Patient with ID ${id} has been successfully deleted.`
         // });
-
-        await User.findByIdAndDelete(id);
 
         res.redirect(req.baseUrl);
     } catch (error) {
