@@ -79,12 +79,14 @@ app.use((req, res, next) => {
 
 app.use("/auth", authRoutes);
 app.use("/patients", patientsRoutes);
-app.use("/physios", allowedRoles(ROLES.ADMIN), physiosRoutes);
+app.use("/physios", physiosRoutes);
 app.use("/records", recordsRoutes);
 
 app.listen(PORT, () => {
     console.log(`Server is running on \x1b[34mhttp://localhost:${PORT}...\x1b[0m`);
 });
+ 
+// #ASK All records id should be used as patient id?
 
 // #ASK Can I skip creating a /find as i already do it in the get{Patients/Physios} functions?
 

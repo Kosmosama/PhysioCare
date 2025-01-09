@@ -1,10 +1,11 @@
 import Record from "../models/record.js";
 import Patient from "../models/patient.js";
 import Physio from "../models/physio.js";
+import { ROLES } from "../utils/constants.js";
 
 // Returns the list of all records registered in the clinic
 const getRecords = async (req, res) => {
-    const { surname } = req.query; // There might not be a surname, so it's not required
+    const { surname } = req.query;
 
     try {
         let query = {};
@@ -41,39 +42,27 @@ const getRecords = async (req, res) => {
     }
 };
 
-// Retrieve details from a specific record
+// Retrieve details from a specific record (recieves patient id)
 const getRecord = async (req, res) => {
     const { id } = req.params;
 
-    // #ASK Should this id be from the record or the patient?
-
-    // If it is from the patient (more changes in views & other functions needed)
-    // if (req.user.rol === ROLES.PATIENT && req.user._id !== id) {
-    //     return res.status(403).render('pages/error', {
-    //         title: "Forbidden",
-    //         error: "Forbidden: Insufficient role privileges.",
-    //         code: 403
-    //     });
-    // }
+    if (req.user.rol === ROLES.PATIENT && req.user._id !== id) {
+        return res.status(403).render('pages/error', {
+            title: "Forbidden",
+            error: "Forbidden: Insufficient role privileges.",
+            code: 403
+        });
+    }
 
     try {
-        const record = await Record.findById(id)
+        const record = await Record.findOne({ patient: id })
         .populate('patient', 'name surname')
         .populate('appointments.physio', 'name');
-        
-        // If it is from the record
-        if (record && req.user.rol === ROLES.PATIENT && record.patient._id.toString() !== req.user._id) {
-            return res.status(403).render('pages/error', {
-                title: "Forbidden",
-                error: "Forbidden: You do not have permission to access this record.",
-                code: 403
-            });
-        }
 
         if (!record) {
             return res.status(404).render('pages/error', {
                 title: "Record Not Found",
-                error: `No record found with ID: ${id}`,
+                error: `No record found for patient with ID: ${id}`,
                 code: 404
             });
         }
@@ -94,6 +83,14 @@ const getRecord = async (req, res) => {
 // Insert a new record
 const addRecord = async (req, res) => {
     const { patientId, medicalRecord } = req.body;
+
+    if (!patientId) {
+        return res.status(400).render('pages/error', {
+            title: "Invalid Request",
+            error: "Patient ID is required to create a medical record.",
+            code: 400
+        });
+    }
 
     try {
         const patient = await Patient.findById(patientId);
@@ -191,7 +188,7 @@ const addAppointment = async (req, res) => {
     const { id } = req.params;
 
     try {
-        const record = await Record.findById(id).populate("patient");
+        const record = await Record.findOne({ patient: id }).populate("patient");
         if (!record) {
             return res.status(404).render("pages/error", {
                 title: "Record Not Found",
@@ -221,8 +218,16 @@ const addAppointmentToRecord = async (req, res) => {
     const { id } = req.params;
     const { date, physio, diagnosis, treatment, observations } = req.body;
 
+    const appointment = {
+        date,
+        physio,
+        diagnosis,
+        treatment,
+        observations
+    };
+
     try {
-        const record = await Record.findById(id);
+        const record = await Record.findOne({ patient: id });
         if (!record) {
             return res.status(404).render('pages/error', {
                 title: "Record Not Found",
@@ -230,34 +235,30 @@ const addAppointmentToRecord = async (req, res) => {
                 code: 404
             });
         }
-
-        const appointment = {
-            date,
-            physio,
-            diagnosis,
-            treatment,
-            observations
-        };
-
+        
         record.appointments.push({
             appointment
         });
-
+        
+        console.log(record);
         await record.save();
+        console.log(record);
 
-        res.redirect(`/records/${id}`);
+        res.redirect(`/records/${record.patient._id}`);
     } catch (error) {
         const errors = { general: "An error occurred while adding the appointment." };
-        const physios = await Physio.find();
 
         if (error.name === 'ValidationError') {
+            const physios = await Physio.find();
+            const record = await Record.findOne({ patient: id }).populate("patient");
+
             if (error.errors.date) errors.date = error.errors.date.message;
             if (error.errors.physio) errors.physio = error.errors.physio.message;
             if (error.errors.diagnosis) errors.diagnosis = error.errors.diagnosis.message;
             if (error.errors.treatment) errors.treatment = error.errors.treatment.message;
             if (error.errors.observations) errors.observations = error.errors.observations.message;
         
-            res.status(400).render('pages/records/record_add', {
+            return res.status(400).render('pages/records/appointment_add', {
                 title: "Validation Error",
                 error: errors,
                 appointment,

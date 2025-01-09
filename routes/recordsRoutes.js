@@ -10,6 +10,8 @@ import {
     createRecord
 } from "../controllers/recordsController.js";
 
+// #FIX Nothing is working as it should.
+
 const router = express.Router();
 
 router.get("/new", allowedRoles(ROLES.ADMIN, ROLES.PHYSIO), createRecord);

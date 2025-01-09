@@ -8,12 +8,12 @@
     <p><strong>Surname:</strong> {{ record.patient.surname }}</p>
 
     <h2>Appointment Details</h2>
-    <form method="POST" action="/records/{{ record._id }}/appointments">
+    <form method="POST" action="/records/{{ record.patient._id }}/appointments">
         <div class="form-group">
             <label for="date">Appointment Date:</label>
-            {% if errors.physio %}
+            {% if errors.date %}
                 <div class="alert alert-danger">
-                    <p>{{ errors.physio }}</p>
+                    <p>{{ errors.date }}</p>
                 </div>
             {% endif %}
             <input type="date" id="date" name="date" required value="{{ appointment.date or '' }}">
@@ -21,9 +21,9 @@
 
         <div class="form-group">
             <label for="physio">Physiotherapist:</label>
-            {% if errors.diagnosis %}
+            {% if errors.physio %}
                 <div class="alert alert-danger">
-                    <p>{{ errors.diagnosis }}</p>
+                    <p>{{ errors.physio }}</p>
                 </div>
             {% endif %}
             <select id="physio" name="physio" required>
@@ -41,7 +41,7 @@
                     <p>{{ errors.diagnosis }}</p>
                 </div>
             {% endif %}
-            <textarea id="diagnosis" name="diagnosis" rows="3" minlength="10" maxlength="500" required value="{{ appointment.diagnosis or '' }}"></textarea>
+            <textarea id="diagnosis" name="diagnosis" rows="3" minlength="10" maxlength="500" required>{{ appointment.diagnosis or '' }}</textarea>
         </div>
 
         <div class="form-group">
@@ -51,7 +51,7 @@
                     <p>{{ errors.treatment }}</p>
                 </div>
             {% endif %}
-            <textarea id="treatment" name="treatment" rows="3" required value="{{ appointment.treatment or '' }}"></textarea>
+            <textarea id="treatment" name="treatment" rows="3" required>{{ appointment.treatment or '' }}</textarea>
         </div>
 
         <div class="form-group">
@@ -61,10 +61,10 @@
                     <p>{{ errors.observations }}</p>
                 </div>
             {% endif %}
-            <textarea id="observations" name="observations" rows="3" value="{{ appointment.observations or '' }}"></textarea>
+            <textarea id="observations" name="observations" rows="3">{{ appointment.observations or '' }}</textarea>
         </div>
 
         <button type="submit" class="button">Add Appointment</button>
-        <a href="/records/{{ record._id }}" class="button">Cancel</a>
+        <a href="/records/{{ record.patient._id }}" class="button">Cancel</a>
     </form>
 {% endblock %}

@@ -39,7 +39,7 @@
             </tbody>
         </table>
         
-        <a href="/records/{{ record._id }}/appointments/new" class="button">Add Appointment</a>
+        <a href="/records/{{ record.patient._id }}/appointments/new" class="button">Add Appointment</a>
     {% else %}
         <p>No appointments available.</p>
     {% endif %}

@@ -28,10 +28,10 @@
                     <td>{{ record.patient.surname }}</td>
                     <td>
                         <!-- View Details Button -->
-                        <a href="/records/{{ record._id }}" class="button">View Details</a>
+                        <a href="/records/{{ record.patient._id }}" class="button">View Details</a>
 
                         <!-- Add Appointment Button -->
-                        <a href="/records/{{ record._id }}/appointments/new" class="button">Add Appointment</a>
+                        <a href="/records/{{ record.patient._id }}/appointments/new" class="button">Add Appointment</a>
                     </td>
                 </tr>
                 {% endfor %}

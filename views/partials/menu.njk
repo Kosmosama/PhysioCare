@@ -28,6 +28,8 @@
 		</li>
 		</ul>
 
+		{# #TODO Add profile button for all except admin #}
+
 		{% if (session and session.user) %}
 			<a class="btn btn-secondary logout-btn" href="/auth/logout">Logout</a>
 		{% else %}

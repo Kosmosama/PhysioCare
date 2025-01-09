@@ -165,14 +165,6 @@ const updatePatient = async (req, res) => {
     const { id } = req.params;
     const { name, surname, birthDate, address, insuranceNumber } = req.body;
 
-    if (req.user.rol === ROLES.PATIENT && req.user._id !== id) {
-        return res.status(403).render('pages/error', {
-            title: "Forbidden",
-            error: "Forbidden: Insufficient role privileges.",
-            code: 403
-        });
-    }
-
     try {
         const updateData = {};
         const patientToUpdate = await Patient.findById(id);
@@ -279,14 +271,6 @@ const deletePatient = async (req, res) => {
 // Edit patient data by ID
 const editPatient = async (req, res) => {
     const { id } = req.params;
-
-    if (req.user.rol === ROLES.PATIENT && req.user._id !== id) {
-        return res.status(403).render('pages/error', {
-            title: "Forbidden",
-            error: "Forbidden: Insufficient role privileges.",
-            code: 403
-        });
-    }
 
     try {
         const patient = await Patient.findById(id);
