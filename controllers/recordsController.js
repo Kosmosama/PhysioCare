@@ -223,7 +223,7 @@ const addAppointmentToRecord = async (req, res) => {
         physio,
         diagnosis,
         treatment,
-        observations
+        observations,
     };
 
     try {
@@ -232,17 +232,13 @@ const addAppointmentToRecord = async (req, res) => {
             return res.status(404).render('pages/error', {
                 title: "Record Not Found",
                 error: `No record found with ID: ${id}`,
-                code: 404
+                code: 404,
             });
         }
-        
-        record.appointments.push({
-            appointment
-        });
-        
-        console.log(record);
+
+        record.appointments.push(appointment);
+
         await record.save();
-        console.log(record);
 
         res.redirect(`/records/${record.patient._id}`);
     } catch (error) {
@@ -257,20 +253,20 @@ const addAppointmentToRecord = async (req, res) => {
             if (error.errors.diagnosis) errors.diagnosis = error.errors.diagnosis.message;
             if (error.errors.treatment) errors.treatment = error.errors.treatment.message;
             if (error.errors.observations) errors.observations = error.errors.observations.message;
-        
+
             return res.status(400).render('pages/records/appointment_add', {
                 title: "Validation Error",
-                error: errors,
+                errors,
                 appointment,
                 record,
-                physios
+                physios,
             });
         }
 
         res.status(500).render('pages/error', {
             title: "Error",
             error: "An error occurred while adding the appointment.",
-            code: 500
+            code: 500,
         });
     }
 };
