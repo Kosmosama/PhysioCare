@@ -17,8 +17,7 @@ import recordsRoutes from "./routes/recordsRoutes.js";
 
 // Internal utilities and middlewares
 import { checkEnvFile } from "./utils/utils.js";
-import { allowedRoles } from "./middlewares/auth.js";
-import { ROLES, SESSION_TIME } from "./utils/constants.js";
+import { SESSION_TIME } from "./utils/constants.js";
 
 dotenv.config();
 checkEnvFile();
@@ -85,10 +84,6 @@ app.use("/records", recordsRoutes);
 app.listen(PORT, () => {
     console.log(`Server is running on \x1b[34mhttp://localhost:${PORT}...\x1b[0m`);
 });
- 
-// #ASK All records id should be used as patient id?
-
-// #ASK Can I skip creating a /find as i already do it in the get{Patients/Physios} functions?
 
 // #TODO Permissions (if something cannot be seen, add button to show it; ex: profile in menu for physio)
 // https://imgur.com/lLLajlq
