@@ -146,7 +146,7 @@ const addPhysio = async (req, res) => {
 };
 
 // Update physio data by ID
-// Breaks updating licensenumber to an existing one
+// #TODO Breaks updating licensenumber to an existing one
 const updatePhysio = async (req, res) => {
     const { id } = req.params;
     const { name, surname, specialty, licenseNumber } = req.body;

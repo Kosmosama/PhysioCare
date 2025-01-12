@@ -46,7 +46,7 @@ const getRecords = async (req, res) => {
 const getRecord = async (req, res) => {
     const { id } = req.params;
 
-    if (req.user.rol === ROLES.PATIENT && req.user._id !== id) {
+    if (req.user.rol === ROLES.PATIENT && req.user.id !== id) {
         return res.status(403).render('pages/error', {
             title: "Forbidden",
             error: "Forbidden: Insufficient role privileges.",
