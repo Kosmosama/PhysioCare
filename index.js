@@ -69,10 +69,14 @@ app.get('/', (req, res) => {
     res.sendFile(__dirname + '/public/index.html');
 });
 
-
-
 app.use((req, res, next) => {
+    const currentUrl = req.originalUrl.split('/')[1];
+    const newMode = req.originalUrl.endsWith('new');
+    
     res.locals.session = req.session;
+    res.locals.currentUrl = currentUrl;
+    res.locals.newMode = newMode;
+
     next();
 });
 
@@ -85,10 +89,9 @@ app.listen(PORT, () => {
     console.log(`Server is running on \x1b[34mhttp://localhost:${PORT}...\x1b[0m`);
 });
 
-// #TODO Permissions (if something cannot be seen, add button to show it; ex: profile in menu for physio)
-// https://imgur.com/lLLajlq
+// #TODO Change main page
 
-// #TODO Error should be a util
+// #TODO Error should be a util (?
 
 // #TODO Install connect-flash to:
 // app.use(flash());

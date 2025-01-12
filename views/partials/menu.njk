@@ -1,40 +1,58 @@
 <nav class="navbar navbar-expand-lg bg-light">
 	<div class="container">
 		<a class="navbar-brand d-flex align-items-center" href="/">
-		<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-2">
-			<polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
-		</svg>
-		<span>MyPage</span>
+			<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-2">
+				<polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+			</svg>
+			<span>MyPage</span>
 		</a>
 
 		<ul class="navbar-nav me-auto mb-2 mb-lg-0">
-		<li class="nav-item">
-			<a class="nav-link active" href="/patients">Patients</a>
-		</li>
-		<li class="nav-item">
-			<a class="nav-link" href="/patients/add">Add Patient</a>
-		</li>
-		<li class="nav-item">
-			<a class="nav-link" href="/physios">Physios</a>
-		</li>
-		<li class="nav-item">
-			<a class="nav-link" href="/physios/add">Add Physio</a>
-		</li>
-		<li class="nav-item">
-			<a class="nav-link" href="/records">Records</a>
-		</li>
-		<li class="nav-item">
-			<a class="nav-link" href="/records/new">Add Record</a>
-		</li>
+			{# Admins and Physios can see "Patients" #}
+			{% if session.user and (session.user.rol == 'admin' or session.user.rol == 'physio') %}
+			<li class="nav-item">
+				<a class="nav-link {{ 'active' if currentUrl == 'patients' and not newMode }}" href="/patients">Patients</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link {{ 'active' if currentUrl == 'patients' and newMode }}" href="/patients/new">Add Patient</a>
+			</li>
+			{% endif %}
+
+			{# All logged users can see "Physios" #}
+			{% if session.user %}
+			<li class="nav-item">
+				<a class="nav-link {{ 'active' if currentUrl == 'physios' and not newMode }}" href="/physios">Physios</a>
+			</li>
+			{% endif %}
+
+			{# Only Admins can see "Add Physio" #}
+			{% if session.user and session.user.rol == 'admin' %}
+			<li class="nav-item">
+				<a class="nav-link {{ 'active' if currentUrl == 'physios' and newMode }}" href="/physios/new">Add Physio</a>
+			</li>
+			{% endif %}
+
+			{# Admins and Physios can see "Records" #}
+			{% if session.user and (session.user.rol == 'admin' or session.user.rol == 'physio') %}
+			<li class="nav-item">
+				<a class="nav-link {{ 'active' if currentUrl == 'records' and not newMode }}" href="/records">Records</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link {{ 'active' if currentUrl == 'records' and newMode }}" href="/records/new">Add Record</a>
+			</li>
+			{% endif %}
 		</ul>
 
-		{# #TODO Add profile button for all except admin #}
+		{# Profile Button #}
+		{% if session.user and (session.user.rol == 'patient' or session.user.rol == 'physio') %}
+			<a class="btn btn-outline-primary profile-btn me-2" href="/{{ 'patients' if session.user.rol == 'patient' else 'physios' }}/{{ session.user.id }}">Profile</a>
+		{% endif %}
 
-		{% if (session and session.user) %}
+		{# Login or Logout Buttons #}
+		{% if session and session.user %}
 			<a class="btn btn-secondary logout-btn" href="/auth/logout">Logout</a>
 		{% else %}
 			<a class="btn btn-primary login-btn" href="/auth/login">Login</a>
 		{% endif %}
-
 	</div>
 </nav>

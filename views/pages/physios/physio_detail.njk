@@ -26,16 +26,18 @@
         <th>License Number</th>
         <td>{{ physio.licenseNumber }}</td>
     </tr>
-    <tr>
-        {# #TODO Only show this to admins. #}
-        <th>Actions</th>
-        <td>
-            <a href="/physios/{{ physio._id }}/edit" class="button">Edit</a>
-            <form method="POST" action="/physios/{{ physio._id }}" style="display: inline;">
-                <input type="hidden" name="_method" value="delete" />
-                <button type="submit" class="button danger">Delete</button>
-            </form>
-        </td>
+    {% if session and session.user and session.user.rol == 'admin' %}
+        <tr>
+            <th>Actions</th>
+            <td>
+                <a href="/physios/{{ physio._id }}/edit" class="button">Edit</a>
+                <form method="POST" action="/physios/{{ physio._id }}" style="display: inline;">
+                    <input type="hidden" name="_method" value="delete" />
+                    <button type="submit" class="button danger">Delete</button>
+                </form>
+            </td>
+        </tr>
+    {% endif %}
 </table>
 
 <a href="/physios">Back to physio List</a>
