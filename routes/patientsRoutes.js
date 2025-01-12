@@ -14,7 +14,7 @@ import {
 
 const router = express.Router();
 
-router.get('/add', allowedRoles(ROLES.ADMIN, ROLES.PHYSIO), showAddPatient);
+router.get('/new', allowedRoles(ROLES.ADMIN, ROLES.PHYSIO), showAddPatient);
 router.get('/:id/edit/', allowedRoles(ROLES.ADMIN, ROLES.PHYSIO), editPatient);
 router.get("/:id", allowedRoles(ROLES.ADMIN, ROLES.PHYSIO, ROLES.PATIENT), getPatient);
 router.get("/", allowedRoles(ROLES.ADMIN, ROLES.PHYSIO), getPatients);
