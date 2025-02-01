@@ -1,28 +1,32 @@
 {% extends "../../layouts/base.njk" %}
 
 {% block content %}
-    <h1>Physios List</h1>
+<div class="container mt-5">
+    <h1 class="mb-4">Physios List</h1>
 
     <!-- Search Form -->
-    {# #TODO Make this a reusable component and add it to menu.njk #}
-    <form method="GET" action="/physios">
-        <label for="specialty">Specialty:</label>
-        {# #TODO Create const in utils for all specialties #}
-        <select id="specialty" name="specialty" required>
-            <option value="" {% if not physio.specialty %}selected{% endif %}>Select Specialty</option>
-            <option value="Sports" {% if physio.specialty == "Sports" %}selected{% endif %}>Sports</option>
-            <option value="Neurological" {% if physio.specialty == "Neurological" %}selected{% endif %}>Neurological</option>
-            <option value="Pediatric" {% if physio.specialty == "Pediatric" %}selected{% endif %}>Pediatric</option>
-            <option value="Geriatric" {% if physio.specialty == "Geriatric" %}selected{% endif %}>Geriatric</option>
-            <option value="Oncological" {% if physio.specialty == "Oncological" %}selected{% endif %}>Oncological</option>
-        </select>
-
-        <button type="submit" class="button">Search</button>
+    <form method="GET" action="/physios" class="mb-4">
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="specialty">Specialty:</label>
+                <select class="form-control" id="specialty" name="specialty">
+                    <option value="" {% if not physio.specialty %}selected{% endif %}>Select Specialty</option>
+                    <option value="Sports" {% if physio.specialty == "Sports" %}selected{% endif %}>Sports</option>
+                    <option value="Neurological" {% if physio.specialty == "Neurological" %}selected{% endif %}>Neurological</option>
+                    <option value="Pediatric" {% if physio.specialty == "Pediatric" %}selected{% endif %}>Pediatric</option>
+                    <option value="Geriatric" {% if physio.specialty == "Geriatric" %}selected{% endif %}>Geriatric</option>
+                    <option value="Oncological" {% if physio.specialty == "Oncological" %}selected{% endif %}>Oncological</option>
+                </select>
+            </div>
+            <div class="form-group col-md-6 align-self-end">
+                <button type="submit" class="btn btn-primary">Search</button>
+            </div>
+        </div>
     </form>
 
     {% if physios.length > 0 %}
-        <table>
-            <thead>
+        <table class="table table-bordered table-striped">
+            <thead class="thead-dark">
                 <tr>
                     <th>Image</th>
                     <th>Name</th>
@@ -36,28 +40,23 @@
                 {% for physio in physios %}
                 <tr>
                     <td>
-                        <!-- Image -->
                         {% if physio.image %}
-                            <img src="{{ physio.image }}" alt="Physio Image" />
+                            <img src="{{ physio.image }}" alt="Physio Image" class="img-fluid" style="max-width: 100px;" />
                         {% else %}
-                            No Image
+                            <span class="text-muted">No Image</span>
                         {% endif %}
                     </td>
                     <td>
-                        <!-- Details page -->
                         <a href="/physios/{{ physio._id }}">{{ physio.name }}</a>
                     </td>
                     <td>{{ physio.surname }}</td>
                     <td>{{ physio.specialty }}</td>
                     <td>{{ physio.licenseNumber }}</td>
                     <td>
-                        <!-- Edit button -->
-                        <a href="/physios/{{ physio._id }}/edit" class="button">Edit</a>
-                        
-                        <!-- Delete button -->
+                        <a href="/physios/{{ physio._id }}/edit" class="btn btn-primary btn-sm">Edit</a>
                         <form method="POST" action="/physios/{{ physio._id }}" style="display: inline;">
                             <input type="hidden" name="_method" value="delete" />
-                            <button type="submit" class="button danger">Delete</button>
+                            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
                         </form>
                     </td>
                 </tr>
@@ -65,6 +64,9 @@
             </tbody>
         </table>
     {% else %}
-        <p>No physios available to display.</p>
+        <div class="alert alert-info" role="alert">
+            No physios available to display.
+        </div>
     {% endif %}
+</div>
 {% endblock %}

@@ -1,44 +1,46 @@
 {% extends "../../layouts/base.njk" %}
 
 {% block content %}
-<h1>Physio Details</h1>
+<div class="container mt-5">
+    <h1 class="mb-4">Physio Details</h1>
 
-<table>
-    {% if physio.image %}
-    <tr>
-        <th>Image</th>
-        <td><img src="{{ physio.image }}" alt="Physio Image" /></td>
-    </tr>
-    {% endif %}
-    <tr>
-        <th>Name</th>
-        <td>{{ physio.name }}</td>
-    </tr>
-    <tr>
-        <th>Surname</th>
-        <td>{{ physio.surname }}</td>
-    </tr>
-    <tr>
-        <th>Specialty</th>
-        <td>{{ physio.specialty }}</td>
-    </tr>
-    <tr>
-        <th>License Number</th>
-        <td>{{ physio.licenseNumber }}</td>
-    </tr>
-    {% if session and session.user and session.user.rol == 'admin' %}
+    <table class="table table-bordered table-striped">
+        {% if physio.image %}
         <tr>
-            <th>Actions</th>
-            <td>
-                <a href="/physios/{{ physio._id }}/edit" class="button">Edit</a>
-                <form method="POST" action="/physios/{{ physio._id }}" style="display: inline;">
-                    <input type="hidden" name="_method" value="delete" />
-                    <button type="submit" class="button danger">Delete</button>
-                </form>
-            </td>
+            <th>Image</th>
+            <td><img src="{{ physio.image }}" alt="Physio Image" class="img-fluid" style="max-width: 200px;" /></td>
         </tr>
-    {% endif %}
-</table>
+        {% endif %}
+        <tr>
+            <th>Name</th>
+            <td>{{ physio.name }}</td>
+        </tr>
+        <tr>
+            <th>Surname</th>
+            <td>{{ physio.surname }}</td>
+        </tr>
+        <tr>
+            <th>Specialty</th>
+            <td>{{ physio.specialty }}</td>
+        </tr>
+        <tr>
+            <th>License Number</th>
+            <td>{{ physio.licenseNumber }}</td>
+        </tr>
+        {% if session and session.user and session.user.rol == 'admin' %}
+            <tr>
+                <th>Actions</th>
+                <td>
+                    <a href="/physios/{{ physio._id }}/edit" class="btn btn-primary btn-sm">Edit</a>
+                    <form method="POST" action="/physios/{{ physio._id }}" style="display: inline;">
+                        <input type="hidden" name="_method" value="delete" />
+                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        {% endif %}
+    </table>
 
-<a href="/physios">Back to physio List</a>
+    <a href="/physios" class="btn btn-secondary">Back to Physio List</a>
+</div>
 {% endblock %}

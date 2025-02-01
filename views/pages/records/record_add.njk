@@ -1,7 +1,8 @@
 {% extends "../../layouts/base.njk" %}
 
 {% block content %}
-    <h1>Create Medical Record</h1>
+<div class="container mt-5">
+    <h1 class="mb-4">Create Medical Record</h1>
 
     <form method="POST" action="/records">
         <div class="form-group">
@@ -11,8 +12,8 @@
                     <p>{{ errors.patient }}</p>
                 </div>
             {% endif %}
-            <select id="patientId" name="patientId" required 
-            {% if not patientsWithoutRecords.length or (patientId and not errors.patient) %}disabled{% endif %}>
+            <select class="form-control" id="patientId" name="patientId" required 
+                {% if not patientsWithoutRecords.length or (patientId and not errors.patient) %}disabled{% endif %}>
                 {% if not patientsWithoutRecords.length %}
                     <option value="" selected>No patients without records</option>
                 {% else %}
@@ -39,11 +40,11 @@
                     <p>{{ errors.medicalRecord }}</p>
                 </div>
             {% endif %}
-            <textarea id="medicalRecord" name="medicalRecord" placeholder="Enter medical record information" maxlength="1000">{{ medicalRecord or '' }}</textarea>
+            <textarea class="form-control" id="medicalRecord" name="medicalRecord" rows="5" placeholder="Enter medical record information" maxlength="1000">{{ medicalRecord or '' }}</textarea>
         </div>
 
-        <button type="submit" class="button">Add Record</button>
+        <button type="submit" class="btn btn-primary">Add Record</button>
+        <a href="/records" class="btn btn-secondary ml-2">Cancel</a>
     </form>
-
-    <a href="/records">Cancel</a>
+</div>
 {% endblock %}

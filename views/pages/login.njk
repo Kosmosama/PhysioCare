@@ -1,25 +1,31 @@
 {% extends "../layouts/base.njk" %}
 
 {% block content %}
-<h1>Login</h1>
+<div class="container mt-5">
+    <h1 class="mb-4">Login</h1>
 
-<form method="POST" action="/auth/login">
-    <div class="form-group">
-        <label for="login">Login:</label>
-        {% if errors.login %}
-            <p class="text-danger">{{ errors.login }}</p>
-        {% endif %}
-        <input type="text" id="login" name="login" value="{{ patient.login or '' }}" required>
-    </div>
+    <form method="POST" action="/auth/login">
+        <div class="form-group">
+            <label for="login">Login:</label>
+            {% if errors.login %}
+                <div class="alert alert-danger">
+                    <p>{{ errors.login }}</p>
+                </div>
+            {% endif %}
+            <input type="text" class="form-control" id="login" name="login" value="{{ patient.login or '' }}" required>
+        </div>
 
-    <div class="form-group">
-        <label for="password">Password:</label>
-        {% if errors.password %}
-            <p class="text-danger">{{ errors.password }}</p>
-        {% endif %}
-        <input type="password" id="password" name="password" required>
-    </div>
+        <div class="form-group">
+            <label for="password">Password:</label>
+            {% if errors.password %}
+                <div class="alert alert-danger">
+                    <p>{{ errors.password }}</p>
+                </div>
+            {% endif %}
+            <input type="password" class="form-control" id="password" name="password" required>
+        </div>
 
-    <button type="submit" class="button">Log In</button>
-</form>
+        <button type="submit" class="btn btn-primary">Log In</button>
+    </form>
+</div>
 {% endblock %}

@@ -6,20 +6,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MyPage</title>
     <link rel="stylesheet" href="/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="/public/css/index.css" />
 </head>
 
 <body>
-    <div class="content-wrapper">
-        <div class="container min-vh-100 d-flex flex-column justify-content-center align-items-center">
-            <h1 class="display-4 mb-5">Luis Martinez Gomez</h1>
+    <div class="min-vh-100 d-flex flex-column justify-content-center align-items-center bg-light">
+        <h1 class="display-4 mb-5 text-center">Luis Martinez Gomez</h1>
 
-            <div class="hexagon-container">
-                <a href="/patients" class="hexagon text-decoration-none">
-                    <div class="hexagon-bg"
-                        style="background-image: url(https://images.unsplash.com/photo-1551601651-2a8555f1a136?auto=format&fit=crop&q=80)">
-                    </div>
-                    <div class="hexagon-content">
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
+            <div class="col">
+                <a href="/patients" class="card text-decoration-none text-center h-100 shadow">
+                    <div class="card-body">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                             class="mb-2">
@@ -28,15 +24,14 @@
                             <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
                             <path d="M16 3.13a4 4 0 0 1 0 7.75" />
                         </svg>
-                        <div>Patients</div>
+                        <h5 class="card-title text-nowrap">Patients</h5>
                     </div>
                 </a>
+            </div>
 
-                <a href="/physios" class="hexagon text-decoration-none">
-                    <div class="hexagon-bg"
-                        style="background-image: url(https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&q=80)">
-                    </div>
-                    <div class="hexagon-content">
+            <div class="col">
+                <a href="/physios" class="card text-decoration-none text-center h-100 shadow">
+                    <div class="card-body">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                             class="mb-2">
@@ -45,30 +40,28 @@
                             <path d="M15 6h6" />
                             <path d="M18 3v6" />
                         </svg>
-                        <div>Physios</div>
+                        <h5 class="card-title text-nowrap">Physios</h5>
                     </div>
                 </a>
+            </div>
 
-                <a href="/records" class="hexagon text-decoration-none">
-                    <div class="hexagon-bg"
-                        style="background-image: url(https://images.unsplash.com/photo-1587300003388-59208cc962cb?auto=format&fit=crop&q=80)">
-                    </div>
-                    <div class="hexagon-content">
+            <div class="col">
+                <a href="/records" class="card text-decoration-none text-center h-100 shadow">
+                    <div class="card-body">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                             class="mb-2">
                             <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z" />
                             <polyline points="14 2 14 8 20 8" />
                         </svg>
-                        <div>Records</div>
+                        <h5 class="card-title text-nowrap">Records</h5>
                     </div>
                 </a>
+            </div>
 
-                <a href="/auth/login" class="hexagon text-decoration-none">
-                    <div class="hexagon-bg"
-                        style="background-image: url(https://images.unsplash.com/photo-1614064641938-3bbee52942c7?auto=format&fit=crop&q=80)">
-                    </div>
-                    <div class="hexagon-content">
+            <div class="col">
+                <a href="/auth/login" class="card text-decoration-none text-center h-100 shadow">
+                    <div class="card-body">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                             class="mb-2">
@@ -76,7 +69,7 @@
                             <polyline points="10 17 15 12 10 7" />
                             <line x1="15" y1="12" x2="3" y2="12" />
                         </svg>
-                        <div>Login</div>
+                        <h5 class="card-title text-nowrap">Login</h5>
                     </div>
                 </a>
             </div>

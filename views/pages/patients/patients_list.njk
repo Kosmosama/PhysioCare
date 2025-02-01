@@ -1,23 +1,30 @@
 {% extends "../../layouts/base.njk" %}
 
 {% block content %}
-    <h1>Patients List</h1>
+<div class="container mt-5">
+    <h1 class="mb-4">Patients List</h1>
 
     <!-- Search Form -->
     {# #TODO Make this a reusable component and add it to menu.njk #}
-    <form method="GET" action="/patients">
-        <label for="searchName">Search by Name:</label>
-        <input type="text" id="searchName" name="name" value="{{ filter.name or '' }}" placeholder="Enter name">
-        
-        <label for="searchSurname">Search by Surname:</label>
-        <input type="text" id="searchSurname" name="surname" value="{{ filter.surname or '' }}" placeholder="Enter surname">
-
-        <button type="submit" class="button">Search</button>
+    <form method="GET" action="/patients" class="mb-4">
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label for="searchName">Search by Name:</label>
+                <input type="text" class="form-control" id="searchName" name="name" value="{{ filter.name or '' }}" placeholder="Enter name">
+            </div>
+            <div class="form-group col-md-4">
+                <label for="searchSurname">Search by Surname:</label>
+                <input type="text" class="form-control" id="searchSurname" name="surname" value="{{ filter.surname or '' }}" placeholder="Enter surname">
+            </div>
+            <div class="form-group col-md-4 align-self-end">
+                <button type="submit" class="btn btn-primary">Search</button>
+            </div>
+        </div>
     </form>
 
     {% if patients.length > 0 %}
-        <table>
-            <thead>
+        <table class="table table-bordered table-striped">
+            <thead class="thead-dark">
                 <tr>
                     <th>Image</th>
                     <th>Name</th>
@@ -25,46 +32,46 @@
                     <th>Birth Date</th>
                     <th>Address</th>
                     <th>Insurance Number</th>
+                    {% if session and session.user and (session.user.rol == 'admin' or session.user.rol == 'physio') %}
                     <th>Actions</th>
+                    {% endif %}
                 </tr>
             </thead>
             <tbody>
                 {% for patient in patients %}
                 <tr>
                     <td>
-                        <!-- Image -->
                         {% if patient.image %}
-                            <img src="{{ patient.image }}" alt="Patient Image" />
+                            <img src="{{ patient.image }}" alt="Patient Image" class="img-fluid" style="max-width: 100px;" />
                         {% else %}
-                            No Image
+                            <span class="text-muted">No Image</span>
                         {% endif %}
                     </td>
                     <td>
-                        <!-- Details page -->
                         <a href="/patients/{{ patient._id }}">{{ patient.name }}</a>
                     </td>
                     <td>{{ patient.surname }}</td>
                     <td>{{ patient.birthDate | date('yyyy-MM-dd') }}</td>
                     <td>{{ patient.address or "Not Provided" }}</td>
                     <td>{{ patient.insuranceNumber }}</td>
+                    {% if session and session.user and (session.user.rol == 'admin' or session.user.rol == 'physio') %}
                     <td>
-                        <!-- Edit button -->
-                        <a href="/patients/{{ patient._id }}/edit" class="button">Edit</a>
-                        
-                        <!-- Delete button -->
+                        <a href="/patients/{{ patient._id }}/edit" class="btn btn-primary btn-sm">Edit</a>
                         <form method="POST" action="/patients/{{ patient._id }}" style="display: inline;">
                             <input type="hidden" name="_method" value="delete" />
-                            <button type="submit" class="button danger">Delete</button>
+                            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
                         </form>
-
-                        <!-- Add Record button -->
-                        <a href="/records/new?patientId={{ patient._id }}" class="button">Create Record</a>
+                        <a href="/records/new?patientId={{ patient._id }}" class="btn btn-success btn-sm">Create Record</a>
                     </td>
+                    {% endif %}
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
     {% else %}
-        <p>No patients available to display.</p>
+        <div class="alert alert-info" role="alert">
+            No patients available to display.
+        </div>
     {% endif %}
+</div>
 {% endblock %}

@@ -89,8 +89,9 @@ app.listen(PORT, () => {
     console.log(`Server is running on \x1b[34mhttp://localhost:${PORT}...\x1b[0m`);
 });
 
+// #TODO Fix adding existing patient/physio (login at least)
 // #TODO Change main page
-
+// #TODO Confirm to delete
 // #TODO Error should be a util (?
 
 // #TODO Install connect-flash to:

@@ -1,53 +1,52 @@
 {% extends "../../layouts/base.njk" %}
 
 {% block content %}
-<h1>Patient Details</h1>
+<div class="container mt-5">
+    <h1 class="mb-4">Patient Details</h1>
 
-<table>
-    {% if patient.image %}
-    <tr>
-        <th>Image</th>
-        <td><img src="{{ patient.image }}" alt="Patient Image" /></td>
-    </tr>
-    {% endif %}
-    <tr>
-        <th>Name</th>
-        <td>{{ patient.name }}</td>
-    </tr>
-    <tr>
-        <th>Surname</th>
-        <td>{{ patient.surname }}</td>
-    </tr>
-    <tr>
-        <th>Birth Date</th>
-        <td>{{ patient.birthDate | date('yyyy-MM-dd') }}</td>
-    </tr>
-    <tr>
-        <th>Address</th>
-        <td>{{ patient.address or "Not Provided" }}</td>
-    </tr>
-    <tr>
-        <th>Insurance Number</th>
-        <td>{{ patient.insuranceNumber }}</td>
-    </tr>
-    <tr>
-        <th>Actions</th>
-        {% if (session and session.user) %}
-			<p>{{ session.user.rol }}</p>
-		{% endif %}
-        <td>
-            {% if session and session.user and (session.user.rol == 'admin' or session.user.rol == 'physio') %}
-                <a href="/patients/{{ patient._id }}/edit" class="button">Edit</a>
-                <form method="POST" action="/patients/{{ patient._id }}" style="display: inline;">
-                    <input type="hidden" name="_method" value="delete" />
-                    <button type="submit" class="button danger">Delete</button>
-                </form>
-                <a href="/records/new?patientId={{ patient._id }}" class="button">Create Record</a>
-            {% endif %}
-            <a href="/records/{{ patient._id }}" class="button">View Record</a>
-        </td>
-    </tr>
-</table>
+    <table class="table table-bordered">
+        {% if patient.image %}
+        <tr>
+            <th>Image</th>
+            <td><img src="{{ patient.image }}" alt="Patient Image" class="img-fluid" style="max-width: 200px;" /></td>
+        </tr>
+        {% endif %}
+        <tr>
+            <th>Name</th>
+            <td>{{ patient.name }}</td>
+        </tr>
+        <tr>
+            <th>Surname</th>
+            <td>{{ patient.surname }}</td>
+        </tr>
+        <tr>
+            <th>Birth Date</th>
+            <td>{{ patient.birthDate | date('yyyy-MM-dd') }}</td>
+        </tr>
+        <tr>
+            <th>Address</th>
+            <td>{{ patient.address or "Not Provided" }}</td>
+        </tr>
+        <tr>
+            <th>Insurance Number</th>
+            <td>{{ patient.insuranceNumber }}</td>
+        </tr>
+        <tr>
+            <th>Actions</th>
+            <td>
+                {% if session and session.user and (session.user.rol == 'admin' or session.user.rol == 'physio') %}
+                    <a href="/patients/{{ patient._id }}/edit" class="btn btn-primary btn-sm">Edit</a>
+                    <form method="POST" action="/patients/{{ patient._id }}" style="display: inline;">
+                        <input type="hidden" name="_method" value="delete" />
+                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                    </form>
+                    <a href="/records/new?patientId={{ patient._id }}" class="btn btn-success btn-sm">Create Record</a>
+                {% endif %}
+                <a href="/records/{{ patient._id }}" class="btn btn-info btn-sm">View Record</a>
+            </td>
+        </tr>
+    </table>
 
-<a href="/patients">Back to Patient List</a>
+    <a href="/patients" class="btn btn-secondary">Back to Patient List</a>
+</div>
 {% endblock %}

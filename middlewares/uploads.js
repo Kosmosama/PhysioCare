@@ -25,7 +25,7 @@ const deleteImage = (imageName) => {
 
     fs.unlink(fullPath, (error) => {
         if (error) {
-            console.error(`Failed to delete image at ${fullPath}:`, error);
+            console.warn(`Failed to delete image at \"${fullPath}\".`);
         }
     });
 };

@@ -26,18 +26,10 @@ const login = async (req, res) => {
     try {
         const user = await User.findOne({ login });
 
-        if (!user) {
+        if (!user || user.password !== password) {
             return res.render('pages/login', {
                 title: "Login - Error",
                 errors: { login: "Invalid login or password." },
-                patient: { login }
-            });
-        }
-
-        if (user.password !== password) {
-            return res.render('pages/login', {
-                title: "Login - Error",
-                errors: { password: "Invalid login or password." },
                 patient: { login }
             });
         }

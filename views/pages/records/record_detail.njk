@@ -1,26 +1,31 @@
 {% extends "../../layouts/base.njk" %}
 
 {% block content %}
-    <h1>Record Details</h1>
+<div class="container mt-5">
+    <h1 class="mb-4">Record Details</h1>
 
-    <h2>Patient Information</h2>
-    <p><strong>Name:</strong> {{ record.patient.name }}</p>
-    <p><strong>Surname:</strong> {{ record.patient.surname }}</p>
+    <h2 class="mb-3">Patient Information</h2>
+    <div class="mb-4">
+        <p><strong>Name:</strong> {{ record.patient.name }}</p>
+        <p><strong>Surname:</strong> {{ record.patient.surname }}</p>
+    </div>
 
-    <h2>Medical Record</h2>
-    {% if record.medicalRecord %}
-        <p>{{ record.medicalRecord }}</p>
-    {% else %}
-        <p>No medical record available.</p>
-    {% endif %}
+    <h2 class="mb-3">Medical Record</h2>
+    <div class="mb-4">
+        {% if record.medicalRecord %}
+            <p>{{ record.medicalRecord }}</p>
+        {% else %}
+            <p class="text-muted">No medical record available.</p>
+        {% endif %}
+    </div>
 
-    <h2>Appointments</h2>
+    <h2 class="mb-3">Appointments</h2>
     {% if record.appointments.length > 0 %}
-        <table>
-            <thead>
+        <table class="table table-bordered table-striped">
+            <thead class="thead-dark">
                 <tr>
                     <th>Date</th>
-                    <th>Physio</th> {# If physio not available, show something instead of physio not available ig #}
+                    <th>Physio</th>
                     <th>Diagnosis</th>
                     <th>Treatment</th>
                     <th>Observations</th>
@@ -30,7 +35,7 @@
                 {% for appointment in record.appointments %}
                 <tr>
                     <td>{{ appointment.date | date('yyyy-MM-dd') }}</td>
-                    <td>{{ appointment.physio.name }}</td>
+                    <td>{{ appointment.physio.name or "Not Available" }}</td>
                     <td>{{ appointment.diagnosis }}</td>
                     <td>{{ appointment.treatment }}</td>
                     <td>{{ appointment.observations or "None" }}</td>
@@ -38,9 +43,13 @@
                 {% endfor %}
             </tbody>
         </table>
-        
-        <a href="/records/{{ record.patient._id }}/appointments/new" class="button">Add Appointment</a>
+
+        <a href="/records/{{ record.patient._id }}/appointments/new" class="btn btn-primary">Add Appointment</a>
     {% else %}
-        <p>No appointments available.</p>
+        <div class="alert alert-info" role="alert">
+            No appointments available.
+        </div>
+        <a href="/records/{{ record.patient._id }}/appointments/new" class="btn btn-primary">Add Appointment</a>
     {% endif %}
+</div>
 {% endblock %}
