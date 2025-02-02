@@ -5,52 +5,8 @@
     <h1 class="mb-4">Edit Patient</h1>
 
     <form method="POST" action="/patients/{{ patient._id }}" enctype="multipart/form-data">
-        <input type="hidden" name="_method" value="put" />
-
-        <div class="form-group">
-            <label for="name">Name:</label>
-            {% if errors.name %}
-                <p class="text-danger">{{ errors.name }}</p>
-            {% endif %}
-            <input type="text" class="form-control" id="name" name="name" value="{{ patient.name }}">
-        </div>
-
-        <div class="form-group">
-            <label for="surname">Surname:</label>
-            {% if errors.surname %}
-                <p class="text-danger">{{ errors.surname }}</p>
-            {% endif %}
-            <input type="text" class="form-control" id="surname" name="surname" value="{{ patient.surname }}">
-        </div>
-
-        <div class="form-group">
-            <label for="birthDate">Birth Date:</label>
-            {% if errors.birthDate %}
-                <p class="text-danger">{{ errors.birthDate }}</p>
-            {% endif %}
-            <input type="date" class="form-control" id="birthDate" name="birthDate" value="{{ patient.birthDate | date('yyyy-MM-dd') }}">
-        </div>
-
-        <div class="form-group">
-            <label for="address">Address:</label>
-            {% if errors.address %}
-                <p class="text-danger">{{ errors.address }}</p>
-            {% endif %}
-            <input type="text" class="form-control" id="address" name="address" value="{{ patient.address }}">
-        </div>
-
-        <div class="form-group">
-            <label for="insuranceNumber">Insurance Number:</label>
-            {% if errors.insuranceNumber %}
-                <p class="text-danger">{{ errors.insuranceNumber }}</p>
-            {% endif %}
-            <input type="text" class="form-control" id="insuranceNumber" name="insuranceNumber" value="{{ patient.insuranceNumber }}">
-        </div>
-
-        <div class="form-group mb-3">
-            <label for="image">Image:</label>
-            <input type="file" class="form-control" name="image" />
-        </div>
+        
+        {% include "../../partials/patient_form.part.njk" %}
 
         <button type="submit" class="btn btn-primary">Save Changes</button>
         <a href="/patients/{{ patient._id }}" class="btn btn-secondary ml-2">Cancel</a>
