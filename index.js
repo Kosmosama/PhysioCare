@@ -70,9 +70,10 @@ app.get('/', (req, res) => {
 });
 
 app.use((req, res, next) => {
-    const currentUrl = req.originalUrl.split('/')[1];
-    const newMode = req.originalUrl.endsWith('new');
-    
+    const noParamUrl = req.originalUrl.split('?')[0];
+    const currentUrl = noParamUrl.split('/')[1];
+    const newMode = noParamUrl.endsWith('new');
+
     res.locals.session = req.session;
     res.locals.currentUrl = currentUrl;
     res.locals.newMode = newMode;
@@ -88,29 +89,3 @@ app.use("/records", recordsRoutes);
 app.listen(PORT, () => {
     console.log(`Server is running on \x1b[34mhttp://localhost:${PORT}...\x1b[0m`);
 });
-
-// #TODO Fix adding existing patient/physio (login at least)
-// #TODO Change main page
-// #TODO Confirm to delete
-// #TODO Error should be a util (?
-
-// #TODO Install connect-flash to:
-// app.use(flash());
-
-// app.use((req, res, next) => {
-//     res.locals.success = req.flash('success');
-//     res.locals.error = req.flash('error');
-//     next();
-// });
-
-// Ex:
-// req.flash('success', `Patient with ID ${id} has been successfully deleted.`);
-// res.redirect(req.baseUrl);
-
-// Ex:
-// <% if (success) { %>
-//     <div class="alert alert-success"><%= success %></div>
-// <% } %>
-// <% if (error) { %>
-//     <div class="alert alert-danger"><%= error %></div>
-// <% } %>
