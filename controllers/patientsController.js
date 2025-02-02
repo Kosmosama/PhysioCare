@@ -2,6 +2,7 @@ import Patient from "../models/patient.js";
 import User from "../models/user.js";
 import { deleteImage } from "../middlewares/uploads.js";
 import { ROLES } from "../utils/constants.js";
+import { hasRecord } from "./recordsController.js";
 
 // Returns the list of all patients registered in the clinic
 const getPatients = async (req, res) => {
@@ -16,7 +17,7 @@ const getPatients = async (req, res) => {
             if (conditions.length > 0) query.$and = conditions;
         }
 
-        const patients = await Patient.find(query);
+        let patients = await Patient.find(query);
 
         if (patients.length === 0) {
             return res.status(404).render('pages/error', {
@@ -25,6 +26,13 @@ const getPatients = async (req, res) => {
                 code: 404
             });
         }
+
+        patients = await Promise.all(
+            patients.map(async (patient) => ({
+                ...patient.toObject(),
+                hasRecord: await hasRecord(patient._id),
+            }))
+        );
 
         res.render('pages/patients/patients_list', {
             title: "Patients List",
@@ -53,7 +61,7 @@ const getPatient = async (req, res) => {
     }
 
     try {
-        const patient = await Patient.findById(id);
+        let patient = await Patient.findById(id);
 
         if (!patient) {
             return res.status(404).render('pages/error', {
@@ -61,6 +69,11 @@ const getPatient = async (req, res) => {
                 error: `No patient found with ID: ${id}`,
                 code: 404
             });
+        }
+
+        patient = {
+            ...patient.toObject(),
+            hasRecord: await hasRecord(patient._id)
         }
 
         res.status(200).render('pages/patients/patient_detail', {
@@ -85,38 +98,44 @@ const addPatient = async (req, res) => {
         if (req.file) {
             image = `/public/uploads/${req.file.filename}`;
         }
-        
-        const newPatient = new Patient({
-            name,
-            surname,
-            birthDate,
-            address,
-            insuranceNumber,
-            image
-        });
-        
-        const savedPatient = await newPatient.save();
-        
+
         const newUser = new User({
-            _id: savedPatient._id,
-            login: login,
-            password: password,
+            login,
+            password,
             rol: ROLES.PATIENT
         });
-        
-        await newUser.save();
-        
-        res.status(201).render('pages/patients/patient_detail', {
-            title: `Patient Added - ${savedPatient.name} ${savedPatient.surname}`,
-            patient: savedPatient,
-            message: "Patient successfully added!"
-        });
+
+        const savedUser = await newUser.save();
+
+        try {
+            const newPatient = new Patient({
+                _id: savedUser._id,
+                name,
+                surname,
+                birthDate,
+                address,
+                insuranceNumber,
+                image
+            });
+
+            const savedPatient = await newPatient.save();
+
+            return res.status(201).render('pages/patients/patient_detail', {
+                title: `Patient Added - ${savedPatient.name} ${savedPatient.surname}`,
+                patient: savedPatient,
+                message: "Patient successfully added!"
+            });
+
+        } catch (error) {
+            await User.findByIdAndDelete(savedUser._id);
+            throw error;
+        }
     } catch (error) {
         if (req.file) {
             deleteImage(req.file.filename);
         }
 
-        const errors = { general: "An error occurred while creating the patient." };
+        const errors = { general: "An error occurred while processing the request." };
 
         if (error.name === 'ValidationError' || error.code === 11000) {
             if (error.errors) {
@@ -147,7 +166,7 @@ const addPatient = async (req, res) => {
 
         res.status(500).render('pages/error', {
             title: "Internal Server Error",
-            error: "An error occurred while adding the patient.",
+            error: "An error occurred while processing the request.",
             code: 500
         });
     }
@@ -215,7 +234,7 @@ const updatePatient = async (req, res) => {
     
             if (error.code === 11000) errors.insuranceNumber = "Insurance number must be unique.";
     
-            return res.render('pages/patients/edit_patient', {
+            return res.render('pages/patients/patient_edit', {
                 title: "Edit Patient - Validation Error",
                 patient: { _id: id, name, surname, birthDate, address, insuranceNumber },
                 errors
@@ -251,12 +270,6 @@ const deletePatient = async (req, res) => {
 
         await Patient.findByIdAndDelete(id);
         await User.findByIdAndDelete(id);
-
-        // #MAYBE show a confirmation that the patient has been deleted
-        // res.status(200).render('pages/success', {
-        //     title: "Patient Deleted",
-        //     message: `Patient with ID ${id} has been successfully deleted.`
-        // });
 
         res.redirect(req.baseUrl);
     } catch (error) {

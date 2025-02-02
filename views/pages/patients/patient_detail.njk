@@ -40,9 +40,13 @@
                         <input type="hidden" name="_method" value="delete" />
                         <button type="submit" class="btn btn-danger btn-sm">Delete</button>
                     </form>
+                    {% if not patient.hasRecord %}
                     <a href="/records/new?patientId={{ patient._id }}" class="btn btn-success btn-sm">Create Record</a>
+                    {% endif %}
                 {% endif %}
+                {% if not patient.hasRecord %}
                 <a href="/records/{{ patient._id }}" class="btn btn-info btn-sm">View Record</a>
+                {% endif %}
             </td>
         </tr>
     </table>

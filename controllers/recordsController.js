@@ -271,4 +271,16 @@ const addAppointmentToRecord = async (req, res) => {
     }
 };
 
-export { addRecord, createRecord, getRecords, getRecord, addAppointmentToRecord, addAppointment };
+/**
+ * Checks if a patient has a medical record.
+ *
+ * @param {string} patientId - The ID of the patient.
+ * 
+ * @returns {Promise<boolean>} - A promise that resolves to `true` if the patient has a record, otherwise `false`.
+ */
+const hasRecord = async (patientId) => {
+    const record = await Record.findOne({ patient: patientId });
+    return !!record;
+};
+
+export { addRecord, createRecord, getRecords, getRecord, addAppointmentToRecord, addAppointment, hasRecord };

@@ -21,11 +21,15 @@ const upload = multer({ storage: storage });
  * @param {string} imageName - The location of the image to delete.
  */
 const deleteImage = (imageName) => {
-    const fullPath = path.join(process.cwd(), imageName);
+    // console.log(imageName);
+    // const fullPath = path.join(process.cwd(), imageName);
+    const fullPath = imageName.startsWith("/public/uploads/")
+        ? path.join(process.cwd(), imageName)
+        : path.join(process.cwd(), `/public/uploads/${imageName}`);
 
     fs.unlink(fullPath, (error) => {
         if (error) {
-            console.warn(`Failed to delete image at \"${fullPath}\".`);
+            console.warn(`Failed to delete image at \"${imageName}\".`);
         }
     });
 };

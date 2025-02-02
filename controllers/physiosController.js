@@ -132,7 +132,7 @@ const addPhysio = async (req, res) => {
 
             return res.render('pages/physios/physio_add', {
                 title: "Add Physio - Validation Error",
-                physio: { name, surname, birthDate, address, insuranceNumber, login },
+                physio: { name, surname, specialty, licenseNumber, login },
                 errors
             });
         }
@@ -259,12 +259,6 @@ const deletePhysio = async (req, res) => {
 
         await Physio.findByIdAndDelete(id);
         await User.findByIdAndDelete(id);
-
-        // #MAYBE show a confirmation that the physio has been deleted
-        // res.status(200).render('pages/success', {
-        //     title: "Physio Deleted",
-        //     message: `Physio with ID ${id} has been successfully deleted.`
-        // });
 
         res.redirect(req.baseUrl);
     } catch (error) {
